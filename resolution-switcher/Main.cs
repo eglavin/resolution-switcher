@@ -1,4 +1,4 @@
-namespace resolution_switcher
+namespace ResolutionSwitcher
 {
     public partial class MainWindow : Form
     {
@@ -7,13 +7,8 @@ namespace resolution_switcher
             InitializeComponent();
         }
 
-        private void AddName_Click(object sender, EventArgs e)
+        private void SetResolution_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(NameInput.Text) &&
-                !NamesList.Items.Contains(NameInput.Text))
-            {
-                NamesList.Items.Add(NameInput.Text);
-            }
         }
     }
 }

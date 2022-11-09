@@ -1,4 +1,4 @@
-namespace resolution_switcher
+namespace ResolutionSwitcher
 {
     internal static class Program
     {

@@ -1,4 +1,4 @@
-﻿namespace resolution_switcher
+﻿namespace ResolutionSwitcher
 {
     partial class MainWindow
     {
@@ -28,73 +28,66 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.AddNameAction = new System.Windows.Forms.Button();
-            this.NamesLabel = new System.Windows.Forms.Label();
-            this.NamesList = new System.Windows.Forms.ListBox();
-            this.NameInput = new System.Windows.Forms.TextBox();
+            this.ResolutionLabel = new System.Windows.Forms.Label();
+            this.ResolutionListBox = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // AddNameAction
+            // ResolutionLabel
             // 
-            this.AddNameAction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddNameAction.Location = new System.Drawing.Point(815, 171);
-            this.AddNameAction.Name = "AddNameAction";
-            this.AddNameAction.Size = new System.Drawing.Size(569, 46);
-            this.AddNameAction.TabIndex = 0;
-            this.AddNameAction.Text = "Add Name";
-            this.AddNameAction.UseVisualStyleBackColor = true;
-            this.AddNameAction.Click += new System.EventHandler(this.AddName_Click);
+            this.ResolutionLabel.AutoSize = true;
+            this.ResolutionLabel.Location = new System.Drawing.Point(30, 30);
+            this.ResolutionLabel.Name = "ResolutionLabel";
+            this.ResolutionLabel.Size = new System.Drawing.Size(197, 32);
+            this.ResolutionLabel.TabIndex = 1;
+            this.ResolutionLabel.Text = "Select Resolution";
             // 
-            // NamesLabel
+            // ResolutionListBox
             // 
-            this.NamesLabel.AutoSize = true;
-            this.NamesLabel.Location = new System.Drawing.Point(60, 33);
-            this.NamesLabel.Name = "NamesLabel";
-            this.NamesLabel.Size = new System.Drawing.Size(88, 32);
-            this.NamesLabel.TabIndex = 1;
-            this.NamesLabel.Text = "Names";
+            this.ResolutionListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ResolutionListBox.FormattingEnabled = true;
+            this.ResolutionListBox.ItemHeight = 32;
+            this.ResolutionListBox.Items.AddRange(new object[] {
+            "1280x720",
+            "1920x1080"});
+            this.ResolutionListBox.Location = new System.Drawing.Point(30, 101);
+            this.ResolutionListBox.Name = "ResolutionListBox";
+            this.ResolutionListBox.Size = new System.Drawing.Size(515, 548);
+            this.ResolutionListBox.TabIndex = 2;
             // 
-            // NamesList
+            // button1
             // 
-            this.NamesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.NamesList.FormattingEnabled = true;
-            this.NamesList.ItemHeight = 32;
-            this.NamesList.Location = new System.Drawing.Point(60, 90);
-            this.NamesList.Name = "NamesList";
-            this.NamesList.Size = new System.Drawing.Size(698, 644);
-            this.NamesList.TabIndex = 2;
-            // 
-            // NameInput
-            // 
-            this.NameInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.NameInput.Location = new System.Drawing.Point(815, 90);
-            this.NameInput.Name = "NameInput";
-            this.NameInput.Size = new System.Drawing.Size(569, 39);
-            this.NameInput.TabIndex = 3;
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(30, 695);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(515, 46);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Set Resolution";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.SetResolution_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1441, 766);
-            this.Controls.Add(this.NameInput);
-            this.Controls.Add(this.NamesList);
-            this.Controls.Add(this.NamesLabel);
-            this.Controls.Add(this.AddNameAction);
+            this.ClientSize = new System.Drawing.Size(574, 779);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ResolutionListBox);
+            this.Controls.Add(this.ResolutionLabel);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "The best window you\'ve ever seen";
+            this.Text = "Resolution Switcher";
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private Button AddNameAction;
-        private Label NamesLabel;
-        private ListBox NamesList;
-        private TextBox NameInput;
+        private Label ResolutionLabel;
+        private ListBox ResolutionListBox;
+        private Button button1;
     }
 }
