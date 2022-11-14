@@ -1,32 +1,37 @@
 ﻿using System.Runtime.InteropServices;
-using static ResolutionSwitcherCli.GetDisplayDevices;
+using static ResolutionSwitcherCli.DisplayDevices;
+using static ResolutionSwitcherCli.DisplaySettings;
+using static ResolutionSwitcherCli.Flags;
 
 namespace ResolutionSwitcherCli;
 class Resolution
 {
     static void Main()
     {
-        DISPLAY_DEVICE displayDevice = new DISPLAY_DEVICE();
-        displayDevice.cb = Marshal.SizeOf(displayDevice);
+        var displays = GetDisplayDevices();
 
-        try
+        foreach ((DISPLAY_DEVICE display, int key) in displays.Select((val, i) => (val, i)))
         {
-            for (uint id = 0; EnumDisplayDevices(null, id, ref displayDevice, 0); id++)
+            if (display.StateFlags.HasFlag(DeviceState.AttachedToDesktop))
             {
-                Console.WriteLine($@"ID: {id}
-DeviceName: {displayDevice.DeviceName}
-DeviceString: {displayDevice.DeviceString}
-DeviceID: {displayDevice.DeviceID}
-DeviceKey: {displayDevice.DeviceKey}
-StateFlags: {displayDevice.StateFlags}
+                Console.WriteLine($@"ID: {key}
+Device Name: {display.DeviceName}
+Device String: {display.DeviceString}
+Device ID: {display.DeviceID}
+Device Key: {display.DeviceKey}
+State Flags: {display.StateFlags}
 --------------------------------------------------------------------------------");
 
-                displayDevice.cb = Marshal.SizeOf(displayDevice);
+                var displayModes = GetDisplaySettings(display.DeviceName);
+
+                foreach (var mode in displayModes)
+                {
+                    Console.WriteLine($@"Width: {mode.dmPelsWidth}
+Height: {mode.dmPelsHeight}
+---------------------------");
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
+
         }
     }
 }
