@@ -60,6 +60,7 @@ class ChangeDisplaySettings
     /// <summary>
     /// The ChangeDisplaySettingsEx function changes the settings of the specified display device to the specified graphics mode.
     /// </summary>
+    /// http://www.pinvoke.net/default.aspx/user32.ChangeDisplaySettingsEx
     /// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa
     /// <param name="lpszDeviceName">A pointer to a null-terminated string that specifies the display device whose graphics mode will change.</param>
     /// <param name="lpDevMode">A pointer to a DEVMODE structure that describes the new graphics mode. If lpDevMode is NULL, all the values currently in the registry will be used for the display setting.</param>
