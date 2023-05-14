@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-using static ResolutionSwitcherCli.DisplayDevices;
+﻿using static ResolutionSwitcherCli.DisplayDevices;
 using static ResolutionSwitcherCli.DisplaySettings;
 using static ResolutionSwitcherCli.Flags;
+using static ResolutionSwitcherCli.Resolutions;
 
 namespace ResolutionSwitcherCli;
 class Resolution
@@ -20,18 +20,15 @@ Device String: {display.DeviceString}
 Device ID: {display.DeviceID}
 Device Key: {display.DeviceKey}
 State Flags: {display.StateFlags}
---------------------------------------------------------------------------------");
+Device Number: {GetDeviceNumber(display.DeviceKey)}");
 
-                var displayModes = GetDisplaySettings(display.DeviceName);
+                var displaySizes = GetDisplaySizes(display.DeviceName);
 
-                foreach (var mode in displayModes)
-                {
-                    Console.WriteLine($@"Width: {mode.dmPelsWidth}
-Height: {mode.dmPelsHeight}
----------------------------");
-                }
+                ShowResolutions("Supported Widths", displaySizes.Width);
+                ShowResolutions("Supported Heights", displaySizes.Height);
+
+                Console.WriteLine("--------------------------------------------------------------------------------");
             }
-
         }
     }
 }

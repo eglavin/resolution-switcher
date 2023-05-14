@@ -86,5 +86,18 @@ class DisplayDevices
 
         return displays;
     }
+
+    public static int GetDeviceNumber(string deviceKey)
+    {
+        try
+        {
+            string deviceString = deviceKey.Split('\\').Last();
+            return Convert.ToInt32(deviceString) + 1; // Zero based index
+        }
+        catch (Exception ex)
+        {
+            return -1;
+        }
+    }
 }
 
