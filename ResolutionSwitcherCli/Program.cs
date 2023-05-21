@@ -1,34 +1,80 @@
-﻿using static ResolutionSwitcherCli.DisplayDevices;
-using static ResolutionSwitcherCli.DisplaySettings;
-using static ResolutionSwitcherCli.Flags;
-using static ResolutionSwitcherCli.Resolutions;
+﻿using static ResolutionSwitcher.DisplayDevices;
+using static ResolutionSwitcher.DisplayDeviceSettings;
+using static ResolutionSwitcher.ChangeDisplaySettings;
+using static ResolutionSwitcher.Flags;
+using static ResolutionSwitcher.Logs;
 
-namespace ResolutionSwitcherCli;
-class Resolution
+var displayDevice = GetDisplayDevices();
+displayDevice.ForEach((device) =>
 {
-    static void Main()
+    if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop))
     {
-        var displays = GetDisplayDevices();
+        var displayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName);
+        device.DisplayModeDetails = displayModeDetails;
 
-        foreach ((DISPLAY_DEVICE display, int key) in displays.Select((val, i) => (val, i)))
+        LogDeviceDetails(device, true);
+    }
+});
+
+Console.Write("Enter the desired display id or any key to quit: ");
+var displayIndexInput = Console.ReadLine();
+if (!int.TryParse(displayIndexInput, out _))
+{
+    return;
+}
+
+var deviceDetails = displayDevice.Find(
+    (d) => d.Index.ToString() == displayIndexInput
+);
+
+if (deviceDetails == null)
+{
+    Console.WriteLine("\nDisplay not found");
+    return;
+}
+else
+{
+    Console.WriteLine("\nDisplay found\n");
+    deviceDetails.DisplayModeDetails.ForEach((details) => LogModeDetails(details));
+
+    Console.Write("Enter the desired display mode id or any key to quit: ");
+    var displayModeIndexInput = Console.ReadLine();
+    if (!int.TryParse(displayModeIndexInput, out _))
+    {
+        return;
+    }
+
+    var deviceMode = deviceDetails.DisplayModeDetails.Find(
+        (d) => d.Index.ToString() == displayModeIndexInput
+    );
+
+    if (deviceMode == null)
+    {
+        Console.WriteLine("\nMode not found");
+        return;
+    }
+    else
+    {
+        Console.WriteLine("\nMode found");
+        LogModeDetails(deviceMode);
+
+        var test = TestDisplayMode(deviceDetails.Name, deviceMode.DeviceMode);
+
+        Console.WriteLine($"Output: {test}");
+        if (test != DisplayChangeStatus.Failed)
         {
-            if (display.StateFlags.HasFlag(DeviceState.AttachedToDesktop))
-            {
-                Console.WriteLine($@"ID: {key}
-Device Name: {display.DeviceName}
-Device String: {display.DeviceString}
-Device ID: {display.DeviceID}
-Device Key: {display.DeviceKey}
-State Flags: {display.StateFlags}
-Device Number: {GetDeviceNumber(display.DeviceKey)}");
-
-                var displaySizes = GetDisplaySizes(display.DeviceName);
-
-                ShowResolutions("Supported Widths", displaySizes.Width);
-                ShowResolutions("Supported Heights", displaySizes.Height);
-
-                Console.WriteLine("--------------------------------------------------------------------------------");
-            }
+            var change = ChangeDisplayMode(deviceDetails.Name, deviceMode.DeviceMode);
+            Console.WriteLine($"Change: {change}");
         }
     }
+
+    WriteOutput(new
+    {
+        deviceDetails,
+        deviceMode
+    },
+    "resolution-switcher");
 }
+
+Console.WriteLine("Press any button to quit.");
+Console.ReadKey();

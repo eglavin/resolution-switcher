@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Runtime.InteropServices;
-using static ResolutionSwitcherCli.Flags;
+﻿using System.Runtime.InteropServices;
+using static ResolutionSwitcher.DisplayDeviceSettings;
+using static ResolutionSwitcher.Flags;
 
-namespace ResolutionSwitcherCli;
-class DisplayDevices
+namespace ResolutionSwitcher;
+public class DisplayDevices
 {
     /// <summary>
     /// The DISPLAY_DEVICE structure receives information about the display device specified by the iDevNum parameter of the EnumDisplayDevices function.
@@ -26,7 +26,7 @@ class DisplayDevices
 
         /// <summary>
         /// An array of characters containing the device context string. This is either a description of the display adapter or of the display monitor.
-        /// </summary>        
+        /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string DeviceString;
 
@@ -34,7 +34,7 @@ class DisplayDevices
         /// Device state flags. It can be any reasonable combination of the following.
         /// </summary>
         [MarshalAs(UnmanagedType.U4)]
-        public DeviceState StateFlags;
+        public DisplayDeviceStateFlags StateFlags;
 
         /// <summary>
         /// Not used.
@@ -49,6 +49,24 @@ class DisplayDevices
         public string DeviceKey;
     }
 
+
+    public class DisplayDeviceDetails
+    {
+        public DisplayDeviceDetails(uint index, DISPLAY_DEVICE device)
+        {
+            Index = index;
+            Name = device.DeviceName.Split("\\\\.\\").Last();
+            Number = Convert.ToInt32(device.DeviceName.Split("DISPLAY").Last());
+            DisplayDevice = device;
+        }
+
+        public uint Index { get; set; }
+        public string Name { get; set; }
+        public int Number { get; set; }
+        public DISPLAY_DEVICE DisplayDevice { get; set; }
+        public List<DeviceModeDetails> DisplayModeDetails { get; set; } = new List<DeviceModeDetails>();
+    }
+
     /// <summary>
     /// The EnumDisplayDevices function lets you obtain information about the display devices in the current session.
     /// </summary>
@@ -60,23 +78,23 @@ class DisplayDevices
     /// <param name="dwFlags">Set this flag to EDD_GET_DEVICE_INTERFACE_NAME (0x00000001) to retrieve the device interface name for GUID_DEVINTERFACE_MONITOR, which is registered by the operating system on a per monitor basis.</param>
     /// <returns>If the function fails, the return value is zero. The function fails if iDevNum is greater than the largest device index.</returns>
     [DllImport("user32.dll")]
-    private static extern bool EnumDisplayDevices(string lpDevice,
+    private static extern bool EnumDisplayDevices(string? lpDevice,
                                                   uint iDevNum,
                                                   ref DISPLAY_DEVICE lpDisplayDevice,
                                                   uint dwFlags);
 
-    public static List<DISPLAY_DEVICE> GetDisplayDevices()
+    public static List<DisplayDeviceDetails> GetDisplayDevices()
     {
-        List<DISPLAY_DEVICE> displays = new();
+        List<DisplayDeviceDetails> displayDevices = new();
         try
         {
-            DISPLAY_DEVICE displayDevice = new();
-            displayDevice.cb = Marshal.SizeOf(displayDevice);
+            DISPLAY_DEVICE device = new();
+            device.cb = Marshal.SizeOf(device);
 
-            for (uint id = 0; EnumDisplayDevices(null, id, ref displayDevice, 0); id++)
+            for (uint index = 0; EnumDisplayDevices(null, index, ref device, 0); index++)
             {
-                displays.Add(displayDevice);
-                displayDevice.cb = Marshal.SizeOf(displayDevice);
+                displayDevices.Add(new DisplayDeviceDetails(index, device));
+                device.cb = Marshal.SizeOf(device);
             }
         }
         catch (Exception ex)
@@ -84,20 +102,27 @@ class DisplayDevices
             Console.WriteLine(ex.ToString());
         }
 
-        return displays;
+        return displayDevices;
     }
 
-    public static int GetDeviceNumber(string deviceKey)
+    public static void LogDeviceDetails(DisplayDeviceDetails device, bool expanded = false)
     {
-        try
+        if (expanded)
         {
-            string deviceString = deviceKey.Split('\\').Last();
-            return Convert.ToInt32(deviceString) + 1; // Zero based index
+            Console.WriteLine($@"Display ID: {device.Index}
+Name: {device.Name}
+String: {device.DisplayDevice.DeviceString}
+ID: {device.DisplayDevice.DeviceID}
+Key: {device.DisplayDevice.DeviceKey}
+Flags: {device.DisplayDevice.StateFlags}");
         }
-        catch (Exception ex)
+        else
         {
-            return -1;
+            Console.WriteLine($@"Display ID: {device.Index}
+Name: {device.Name}
+Flags: {device.DisplayDevice.StateFlags}");
         }
+
+        Console.WriteLine();
     }
 }
-
