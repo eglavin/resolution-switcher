@@ -5,6 +5,9 @@ using static ResolutionSwitcher.Flags;
 using static ResolutionSwitcher.Logs;
 
 
+var logOutputFilename = "resolution-switcher-cli";
+
+
 var displayDevices = GetDisplayDevices();
 displayDevices.ForEach((device) =>
 {
@@ -23,6 +26,12 @@ Console.Write("Enter the desired device id or any key to quit: ");
 var deviceIndexInput = Console.ReadLine();
 if (!int.TryParse(deviceIndexInput, out _))
 {
+    WriteOutput(new
+    {
+        displayDevices,
+        deviceIndexInput,
+    },
+    logOutputFilename);
     return;
 }
 
@@ -33,6 +42,14 @@ var selectedDevice = displayDevices.Find(
 if (selectedDevice == null)
 {
     Console.WriteLine("Device not found\n");
+
+    WriteOutput(new
+    {
+        displayDevices,
+        deviceIndexInput,
+        selectedDevice,
+    },
+    logOutputFilename);
     return;
 }
 
@@ -46,6 +63,14 @@ Console.Write("\nEnter the desired display mode id or any key to quit: ");
 var modeIndexInput = Console.ReadLine();
 if (!int.TryParse(modeIndexInput, out _))
 {
+    WriteOutput(new
+    {
+        displayDevices,
+        deviceIndexInput,
+        selectedDevice,
+        modeIndexInput,
+    },
+    logOutputFilename);
     return;
 }
 
@@ -56,6 +81,16 @@ var selectedMode = selectedDevice.DisplayModeDetails.Find(
 if (selectedMode == null)
 {
     Console.WriteLine("Mode not found\n");
+
+    WriteOutput(new
+    {
+        displayDevices,
+        deviceIndexInput,
+        selectedDevice,
+        modeIndexInput,
+        selectedMode,
+    },
+    logOutputFilename);
     return;
 }
 
@@ -73,6 +108,17 @@ var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, select
 if (testStatus != DisplayChangeStatus.Successful)
 {
     Console.WriteLine("Test failed\n");
+
+    WriteOutput(new
+    {
+        displayDevices,
+        deviceIndexInput,
+        selectedDevice,
+        modeIndexInput,
+        selectedMode,
+        testStatus,
+    },
+    logOutputFilename);
     return;
 }
 
@@ -94,4 +140,4 @@ WriteOutput(new
     testStatus,
     changeStatus,
 },
-"resolution-switcher-cli");
+logOutputFilename);
