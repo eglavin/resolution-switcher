@@ -4,77 +4,94 @@ using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.Flags;
 using static ResolutionSwitcher.Logs;
 
-var displayDevice = GetDisplayDevices();
-displayDevice.ForEach((device) =>
+
+var displayDevices = GetDisplayDevices();
+displayDevices.ForEach((device) =>
 {
     if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop))
     {
-        var displayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName);
-        device.DisplayModeDetails = displayModeDetails;
+        // Attach the display mode details to the device
+        device.DisplayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName, true);
 
-        LogDeviceDetails(device, true);
+        LogDeviceDetails(device);
+        Console.WriteLine();
     }
 });
 
-Console.Write("Enter the desired display id or any key to quit: ");
-var displayIndexInput = Console.ReadLine();
-if (!int.TryParse(displayIndexInput, out _))
+
+Console.Write("Enter the desired device id or any key to quit: ");
+var deviceIndexInput = Console.ReadLine();
+if (!int.TryParse(deviceIndexInput, out _))
 {
     return;
 }
 
-var deviceDetails = displayDevice.Find(
-    (d) => d.Index.ToString() == displayIndexInput
+
+var selectedDevice = displayDevices.Find(
+    (device) => device.Index.ToString() == deviceIndexInput
+);
+if (selectedDevice == null)
+{
+    Console.WriteLine("Device not found\n");
+    return;
+}
+
+
+Console.WriteLine("Device found\n");
+selectedDevice.DisplayModeDetails.ForEach((mode) =>
+    LogModeDetails(mode)
 );
 
-if (deviceDetails == null)
+Console.Write("\nEnter the desired display mode id or any key to quit: ");
+var modeIndexInput = Console.ReadLine();
+if (!int.TryParse(modeIndexInput, out _))
 {
-    Console.WriteLine("\nDisplay not found");
     return;
 }
-else
+
+
+var selectedMode = selectedDevice.DisplayModeDetails.Find(
+    (mode) => mode.Index.ToString() == modeIndexInput
+);
+if (selectedMode == null)
 {
-    Console.WriteLine("\nDisplay found\n");
-    deviceDetails.DisplayModeDetails.ForEach((details) => LogModeDetails(details));
-
-    Console.Write("Enter the desired display mode id or any key to quit: ");
-    var displayModeIndexInput = Console.ReadLine();
-    if (!int.TryParse(displayModeIndexInput, out _))
-    {
-        return;
-    }
-
-    var deviceMode = deviceDetails.DisplayModeDetails.Find(
-        (d) => d.Index.ToString() == displayModeIndexInput
-    );
-
-    if (deviceMode == null)
-    {
-        Console.WriteLine("\nMode not found");
-        return;
-    }
-    else
-    {
-        Console.WriteLine("\nMode found");
-        LogModeDetails(deviceMode);
-
-        var test = TestDisplayMode(deviceDetails.Name, deviceMode.DeviceMode);
-
-        Console.WriteLine($"Output: {test}");
-        if (test != DisplayChangeStatus.Failed)
-        {
-            var change = ChangeDisplayMode(deviceDetails.Name, deviceMode.DeviceMode);
-            Console.WriteLine($"Change: {change}");
-        }
-    }
-
-    WriteOutput(new
-    {
-        deviceDetails,
-        deviceMode
-    },
-    "resolution-switcher");
+    Console.WriteLine("Mode not found\n");
+    return;
 }
 
-Console.WriteLine("Press any button to quit.");
-Console.ReadKey();
+
+Console.WriteLine("Mode found\n");
+
+
+Console.WriteLine("Selected Device and mode:");
+LogDeviceDetails(selectedDevice, true);
+LogModeDetails(selectedMode);
+Console.WriteLine();
+
+
+var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
+if (testStatus != DisplayChangeStatus.Successful)
+{
+    Console.WriteLine("Test failed\n");
+    return;
+}
+
+
+Console.WriteLine($"Display Test Status: {testStatus}");
+
+
+var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
+Console.WriteLine($"Display Change Status: {LogDisplaySetting(changeStatus)}");
+
+
+WriteOutput(new
+{
+    displayDevices,
+    deviceIndexInput,
+    selectedDevice,
+    modeIndexInput,
+    selectedMode,
+    testStatus,
+    changeStatus,
+},
+"resolution-switcher-cli");

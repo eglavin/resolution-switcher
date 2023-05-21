@@ -19,10 +19,10 @@ public class ChangeDisplaySettings
     /// <returns></returns>
     [DllImport("user32.dll")]
     private static extern DisplayChangeStatus ChangeDisplaySettingsEx(string lpszDeviceName,
-                                                                     ref DEVICE_MODE lpDevMode,
-                                                                     IntPtr hwnd,
-                                                                     ChangeDisplaySettingsFlags dwflags,
-                                                                     IntPtr lParam);
+                                                                      ref DEVICE_MODE lpDevMode,
+                                                                      IntPtr hwnd,
+                                                                      ChangeDisplaySettingsFlags dwflags,
+                                                                      IntPtr lParam);
 
     public static DisplayChangeStatus TestDisplayMode(string deviceName, DEVICE_MODE deviceMode)
     {
@@ -35,7 +35,7 @@ public class ChangeDisplaySettings
         return status;
     }
 
-    public static string ChangeDisplayMode(string deviceName, DEVICE_MODE deviceMode)
+    public static DisplayChangeStatus ChangeDisplayMode(string deviceName, DEVICE_MODE deviceMode)
     {
         var status = ChangeDisplaySettingsEx(deviceName,
                                              ref deviceMode,
@@ -43,20 +43,39 @@ public class ChangeDisplaySettings
                                              ChangeDisplaySettingsFlags.UpdateRegistry,
                                              IntPtr.Zero);
 
+        return status;
+    }
+
+    public static string LogDisplaySetting(DisplayChangeStatus status)
+    {
         switch (status)
         {
             case DisplayChangeStatus.Successful:
-                {
-                    return "Success";
-                }
+                return "Success";
+
             case DisplayChangeStatus.Restart:
-                {
-                    return "You Need To Reboot For The Change To Happen.\n If You Feel Any Problem After Rebooting Your Machine\nThen Try To Change Resolution In Safe Mode.";
-                }
+                return "You'll need to reboot for these changes to apply";
+
+            case DisplayChangeStatus.Failed:
+                return "Failed To Change The Resolution";
+
+            case DisplayChangeStatus.BadMode:
+                return "The graphics mode is not supported";
+
+            case DisplayChangeStatus.NotUpdated:
+                return "Unable to write settings to the registry";
+
+            case DisplayChangeStatus.BadFlags:
+                return "An invalid set of flags was passed in";
+
+            case DisplayChangeStatus.BadParam:
+                return "An invalid parameter was passed in. This can include an invalid flag or combination of flags.";
+
+            case DisplayChangeStatus.BadDualView:
+                return "The settings change was unsuccessful because the system is DualView capable.";
+
             default:
-                {
-                    return "Failed To Change The Resolution.";
-                }
+                return "Failed To Change The Resolution.";
         }
     }
 }

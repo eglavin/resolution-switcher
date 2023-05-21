@@ -109,7 +109,7 @@ public class DisplayDevices
     {
         if (expanded)
         {
-            Console.WriteLine($@"Display ID: {device.Index}
+            Console.WriteLine($@"Device ID: {device.Index}
 Name: {device.Name}
 String: {device.DisplayDevice.DeviceString}
 ID: {device.DisplayDevice.DeviceID}
@@ -118,11 +118,10 @@ Flags: {device.DisplayDevice.StateFlags}");
         }
         else
         {
-            Console.WriteLine($@"Display ID: {device.Index}
+            Console.WriteLine($@"Device ID: {device.Index}
 Name: {device.Name}
 Flags: {device.DisplayDevice.StateFlags}");
         }
 
-        Console.WriteLine();
     }
 }

@@ -101,19 +101,20 @@ public class DisplayDeviceSettings
                 if ((filtered &&
                     deviceMode.dmPelsWidth >= MIN_WIDTH &&
                     deviceMode.dmPelsHeight >= MIN_HEIGHT &&
-                    (displayModeDetails.FindIndex((d) => d.Width == deviceMode.dmPelsWidth) == -1 ||
-                    displayModeDetails.FindIndex((d) => d.Height == deviceMode.dmPelsHeight) == -1)) ||
+                    displayModeDetails.FindIndex((d) => d.Width == deviceMode.dmPelsWidth && 
+                                                        d.Height == deviceMode.dmPelsHeight) == -1) ||
                     !filtered)
                 {
                     displayModeDetails.Add(new DeviceModeDetails(index, deviceMode));
                 }
             }
 
-            // Sort resolutions by width, then height
+            // Sort resolutions by width, height and index
             displayModeDetails.Sort((a, z) =>
             {
                 var dif = a.Width - z.Width;
                 if (dif == 0) dif = a.Height - z.Height;
+                if (dif == 0) dif = a.Index - z.Index;
                 return dif;
             });
         }
