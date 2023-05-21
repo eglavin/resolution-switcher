@@ -2,10 +2,10 @@
 using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.Flags;
-using static ResolutionSwitcher.Logs;
+using ResolutionSwitcher;
 
 
-var logOutputFilename = "resolution-switcher-cli";
+var logger = new Logger("resolution-switcher-cli");
 
 
 var displayDevices = GetDisplayDevices();
@@ -26,12 +26,11 @@ Console.Write("Enter the desired device id or any key to quit: ");
 var deviceIndexInput = Console.ReadLine();
 if (!int.TryParse(deviceIndexInput, out _))
 {
-    WriteOutput(new
+    logger.WriteOutput(new
     {
         displayDevices,
         deviceIndexInput,
-    },
-    logOutputFilename);
+    });
     return;
 }
 
@@ -43,13 +42,12 @@ if (selectedDevice == null)
 {
     Console.WriteLine("Device not found\n");
 
-    WriteOutput(new
+    logger.WriteOutput(new
     {
         displayDevices,
         deviceIndexInput,
         selectedDevice,
-    },
-    logOutputFilename);
+    });
     return;
 }
 
@@ -63,14 +61,13 @@ Console.Write("\nEnter the desired display mode id or any key to quit: ");
 var modeIndexInput = Console.ReadLine();
 if (!int.TryParse(modeIndexInput, out _))
 {
-    WriteOutput(new
+    logger.WriteOutput(new
     {
         displayDevices,
         deviceIndexInput,
         selectedDevice,
         modeIndexInput,
-    },
-    logOutputFilename);
+    });
     return;
 }
 
@@ -82,15 +79,14 @@ if (selectedMode == null)
 {
     Console.WriteLine("Mode not found\n");
 
-    WriteOutput(new
+    logger.WriteOutput(new
     {
         displayDevices,
         deviceIndexInput,
         selectedDevice,
         modeIndexInput,
         selectedMode,
-    },
-    logOutputFilename);
+    });
     return;
 }
 
@@ -109,7 +105,7 @@ if (testStatus != DisplayChangeStatus.Successful)
 {
     Console.WriteLine("Test failed\n");
 
-    WriteOutput(new
+    logger.WriteOutput(new
     {
         displayDevices,
         deviceIndexInput,
@@ -117,8 +113,7 @@ if (testStatus != DisplayChangeStatus.Successful)
         modeIndexInput,
         selectedMode,
         testStatus,
-    },
-    logOutputFilename);
+    });
     return;
 }
 
@@ -130,7 +125,7 @@ var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, se
 Console.WriteLine($"Display Change Status: {LogDisplaySetting(changeStatus)}");
 
 
-WriteOutput(new
+logger.WriteOutput(new
 {
     displayDevices,
     deviceIndexInput,
@@ -139,5 +134,4 @@ WriteOutput(new
     selectedMode,
     testStatus,
     changeStatus,
-},
-logOutputFilename);
+});

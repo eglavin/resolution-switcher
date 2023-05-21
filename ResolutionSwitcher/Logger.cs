@@ -2,14 +2,25 @@
 using System.Reflection;
 
 namespace ResolutionSwitcher;
-public class Logs
+public class Logger
 {
-    public static void WriteOutput(object output, string fileName)
+    string FileName { get; set; } = "resolution-switcher";
+
+    public Logger(string? fileName)
+    {
+        if (fileName != null)
+        {
+            FileName = fileName;
+        }
+
+    }
+
+    public void WriteOutput(object output)
     {
         var timestamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
 
         var directory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\logs";
-        var fileDirectory = $"{directory}\\{timestamp}_{fileName}.json";
+        var fileDirectory = $"{directory}\\{timestamp}_{FileName}.json";
 
         try
         {
