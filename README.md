@@ -1,20 +1,26 @@
-# Resolution Switcher Planning
+# Resolution Switcher
 
-## What I want to do with resolution switcher
+## What I want resolution switcher to do
 
-1. Pick a better name for it
-2. I want to be able to switch monitor modes from the windows tray bar
-3. I want to be able to define modes using a gui
+1. I want to be able to switch monitor modes from the windows tray bar
+1. I want to be able to define modes using a gui:
    1. Show the user the current monitors and modes
-   2. Create an easy to use gui to define new modes
-4. A mode should be a combination of monitors
+   1. Create an easy to use gui to define new modes
+1. A mode could be a combination of enabled monitors like so:
    1. Main setup - Triple monitors setup enabled by default
-   2. Work setup - Single monitor as primary, other monitors disabled
-   3. Couch setup - TV as primary, other monitors disabled
+   1. Work setup - Single monitor as primary, other monitors disabled
+   1. Couch setup - TV as primary, other monitors disabled
 
-### References:
+## A mode should include
 
-- http://www.pinvoke.net/default.aspx/user32.GetMonitorInfo
-- https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically
-- https://github.com/timmui/ScreenResolutionChanger/blob/master/C%23%20Script/Set-ScreenResolutionEx.cs
-- https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa
+- The combination of monitors enabled
+- The selected resolution of each monitor
+- The primary monitor
+
+## References
+
+- [Pinvoke](http://www.pinvoke.net)
+- [Microsoft - ChangeDisplaySettingsExA function (winuser.h)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa)
+- [Github - timmui / ScreenResolutionChanger](https://github.com/timmui/ScreenResolutionChanger/tree/master)
+- [Github - VFPX / Win32API](https://github.com/VFPX/Win32API/blob/master/libraries/user32)
+- [Code Project - Changing Display Settings Programmatically](https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically)
