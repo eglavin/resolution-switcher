@@ -73,6 +73,14 @@ switch (functionInput)
         break;
     default:
         Console.WriteLine("Invalid function");
+
+        logger.WriteOutput(new
+        {
+            displayDevices,
+            deviceIndexInput,
+            selectedDevice,
+            functionInput,
+        });
         break;
 }
 

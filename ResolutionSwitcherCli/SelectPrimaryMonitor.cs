@@ -33,6 +33,7 @@ class SelectPrimaryMonitor
         var newPrimaryMonitorStatus = SetPrimaryDisplay(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
         Console.WriteLine($"\nSetPrimaryDisplay status ({selectedDevice.Name}): {newPrimaryMonitorStatus}");
 
+        var updatedDevices = new List<Object>();
         foreach (var device in otherDevices)
         {
             if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop))
@@ -42,6 +43,8 @@ class SelectPrimaryMonitor
                 deviceDisplayMode.dmPosition.x -= offsetX;
                 deviceDisplayMode.dmPosition.y -= offsetY;
 
+                updatedDevices.Add(new { device, deviceDisplayMode });
+
                 var status = ChangeDisplayMode(device.DisplayDevice.DeviceName, deviceDisplayMode);
                 Console.WriteLine($"ChangeDisplayMode status ({device.Name}): {status}");
             }
@@ -50,5 +53,15 @@ class SelectPrimaryMonitor
 
         var applyUpdateStatus = ApplyModes();
         Console.WriteLine($"ApplyModes status: {applyUpdateStatus}");
+
+        logger.WriteOutput(new
+        {
+            selectedDevice,
+            otherDevices,
+            currentDeviceDisplayMode,
+            newPrimaryMonitorStatus,
+            updatedDevices,
+            applyUpdateStatus,
+        });
     }
 }
