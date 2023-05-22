@@ -24,3 +24,4 @@
 - [Github - timmui / ScreenResolutionChanger](https://github.com/timmui/ScreenResolutionChanger/tree/master)
 - [Github - VFPX / Win32API](https://github.com/VFPX/Win32API/blob/master/libraries/user32)
 - [Code Project - Changing Display Settings Programmatically](https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically)
+- [StackOverflow - Use Windows API from C# to set primary monitor](https://stackoverflow.com/a/36968861/9325206)

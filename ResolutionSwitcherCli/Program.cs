@@ -3,6 +3,7 @@ using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.Flags;
 using ResolutionSwitcher;
+using ResolutionSwitcherCli;
 
 
 var logger = new Logger("resolution-switcher-cli");
@@ -52,86 +53,26 @@ if (selectedDevice == null)
 }
 
 
-Console.WriteLine("Device found\n");
-selectedDevice.DisplayModeDetails.ForEach((mode) =>
-    LogModeDetails(mode)
-);
+Console.Write(@$"Device found
 
-Console.Write("\nEnter the desired display mode id or any key to quit: ");
-var modeIndexInput = Console.ReadLine();
-if (!int.TryParse(modeIndexInput, out _))
+-- Options --
+1. Set Resolution
+2. Set Primary Monitor
+Enter the function you want to run: ");
+var functionInput = Console.ReadLine();
+switch (functionInput)
 {
-    logger.WriteOutput(new
-    {
-        displayDevices,
-        deviceIndexInput,
-        selectedDevice,
-        modeIndexInput,
-    });
-    return;
+    case "1":
+        var resolution = new SelectResolution(logger);
+        resolution.Run(selectedDevice);
+        break;
+    case "2":
+        var primaryMonitor = new SelectPrimaryMonitor(logger);
+        primaryMonitor.Run(selectedDevice, 
+                           displayDevices.Where((device) => device.Index != selectedDevice.Index).ToList());
+        break;
+    default:
+        Console.WriteLine("Invalid function");
+        break;
 }
 
-
-var selectedMode = selectedDevice.DisplayModeDetails.Find(
-    (mode) => mode.Index.ToString() == modeIndexInput
-);
-if (selectedMode == null)
-{
-    Console.WriteLine("Mode not found\n");
-
-    logger.WriteOutput(new
-    {
-        displayDevices,
-        deviceIndexInput,
-        selectedDevice,
-        modeIndexInput,
-        selectedMode,
-    });
-    return;
-}
-
-
-Console.WriteLine("Mode found\n");
-
-
-Console.WriteLine("Selected Device and mode:");
-LogDeviceDetails(selectedDevice, true);
-LogModeDetails(selectedMode);
-Console.WriteLine();
-
-
-var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
-if (testStatus != DisplayChangeStatus.Successful)
-{
-    Console.WriteLine("Test failed\n");
-
-    logger.WriteOutput(new
-    {
-        displayDevices,
-        deviceIndexInput,
-        selectedDevice,
-        modeIndexInput,
-        selectedMode,
-        testStatus,
-    });
-    return;
-}
-
-
-Console.WriteLine($"Display Test Status: {testStatus}");
-
-
-var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
-Console.WriteLine($"Display Change Status: {LogDisplaySetting(changeStatus)}");
-
-
-logger.WriteOutput(new
-{
-    displayDevices,
-    deviceIndexInput,
-    selectedDevice,
-    modeIndexInput,
-    selectedMode,
-    testStatus,
-    changeStatus,
-});

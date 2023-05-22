@@ -24,29 +24,53 @@ public class ChangeDisplaySettings
                                                                       ChangeDisplaySettingsFlags dwflags,
                                                                       IntPtr lParam);
 
+    /// <summary>
+    /// Overload of ChangeDisplaySettingsEx that accepts nullable parameters.
+    /// </summary>
+    [DllImport("user32.dll")]
+    private static extern DisplayChangeStatus ChangeDisplaySettingsEx(string? lpszDeviceName,
+                                                                      IntPtr lpDevMode,
+                                                                      IntPtr hwnd,
+                                                                      ChangeDisplaySettingsFlags dwflags,
+                                                                      IntPtr lParam);
+
     public static DisplayChangeStatus TestDisplayMode(string deviceName, DEVICE_MODE deviceMode)
     {
-        var status = ChangeDisplaySettingsEx(deviceName,
-                                             ref deviceMode,
-                                             IntPtr.Zero,
-                                             ChangeDisplaySettingsFlags.Test,
-                                             IntPtr.Zero);
-
-        return status;
+        return ChangeDisplaySettingsEx(deviceName,
+                                       ref deviceMode,
+                                       IntPtr.Zero,
+                                       ChangeDisplaySettingsFlags.Test,
+                                       IntPtr.Zero);
     }
 
     public static DisplayChangeStatus ChangeDisplayMode(string deviceName, DEVICE_MODE deviceMode)
     {
-        var status = ChangeDisplaySettingsEx(deviceName,
-                                             ref deviceMode,
-                                             IntPtr.Zero,
-                                             ChangeDisplaySettingsFlags.UpdateRegistry,
-                                             IntPtr.Zero);
-
-        return status;
+        return ChangeDisplaySettingsEx(deviceName,
+                                       ref deviceMode,
+                                       IntPtr.Zero,
+                                       ChangeDisplaySettingsFlags.UpdateRegistry,
+                                       IntPtr.Zero);
     }
 
-    public static string LogDisplaySetting(DisplayChangeStatus status)
+    public static DisplayChangeStatus SetPrimaryDisplay(string deviceName, DEVICE_MODE deviceMode)
+    {
+        return ChangeDisplaySettingsEx(deviceName,
+                                       ref deviceMode,
+                                       IntPtr.Zero,
+                                       ChangeDisplaySettingsFlags.SetPrimary | ChangeDisplaySettingsFlags.UpdateRegistry,
+                                       IntPtr.Zero);
+    }
+
+    public static DisplayChangeStatus ApplyModes()
+    {
+        return ChangeDisplaySettingsEx(null,
+                                       IntPtr.Zero,
+                                       IntPtr.Zero,
+                                       ChangeDisplaySettingsFlags.None,
+                                       IntPtr.Zero);
+    }
+
+    public static string LogDisplayChangeStatus(DisplayChangeStatus status)
     {
         switch (status)
         {

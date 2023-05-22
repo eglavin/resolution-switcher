@@ -6,6 +6,13 @@ public class DisplayDeviceSettings
     public static int MIN_WIDTH = 800;
     public static int MIN_HEIGHT = 600;
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Position
+    {
+        public int x;
+        public int y;
+    }
+
     /// <summary>
     /// The DEVMODE structure is used for specifying characteristics of display and print devices in the Unicode (wide) character set.
     /// </summary>
@@ -42,7 +49,7 @@ public class DisplayDeviceSettings
         public short dmBitsPerPel;
         public int dmPelsWidth;
         public int dmPelsHeight;
-        public int dmPosition;
+        public Position dmPosition;
         public int dmDisplayOrientation;
 
         public int dmDisplayFlags;
@@ -89,6 +96,20 @@ public class DisplayDeviceSettings
                                                    int iModeNum,
                                                    ref DEVICE_MODE lpDevMode);
 
+    public static DeviceModeDetails GetCurrentDisplayMode(string deviceName)
+    {
+        DEVICE_MODE deviceMode = new();
+        try
+        {
+            EnumDisplaySettings(deviceName, -1, ref deviceMode);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        return new DeviceModeDetails(-1, deviceMode);
+    }
+
     public static List<DeviceModeDetails> GetDisplayModeDetails(string deviceName, bool filtered = true)
     {
         List<DeviceModeDetails> displayModeDetails = new();
@@ -101,7 +122,7 @@ public class DisplayDeviceSettings
                 if ((filtered &&
                     deviceMode.dmPelsWidth >= MIN_WIDTH &&
                     deviceMode.dmPelsHeight >= MIN_HEIGHT &&
-                    displayModeDetails.FindIndex((d) => d.Width == deviceMode.dmPelsWidth && 
+                    displayModeDetails.FindIndex((d) => d.Width == deviceMode.dmPelsWidth &&
                                                         d.Height == deviceMode.dmPelsHeight) == -1) ||
                     !filtered)
                 {

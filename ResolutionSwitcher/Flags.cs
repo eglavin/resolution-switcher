@@ -4,19 +4,19 @@ public class Flags
     [Flags()]
     public enum DisplayDeviceStateFlags : int
     {
-        AttachedToDesktop = 1,
-        MultiDriver = 2,
-        PrimaryDevice = 4,
+        AttachedToDesktop = 0x1,
+        MultiDriver = 0x2,
+        PrimaryDevice = 0x4,
         /// <summary>Represents a pseudo device used to mirror application drawing for remoting or other purposes.</summary>
-        MirroringDriver = 8,
+        MirroringDriver = 0x8,
         /// <summary>The device is VGA compatible.</summary>
-        VGACompatible = 10,
+        VGACompatible = 0x10,
         /// <summary>The device is removable; it cannot be the primary display.</summary>
-        Removable = 20,
+        Removable = 0x20,
         /// <summary>The device has more display modes than its output devices support.</summary>
-        ModesPruned = 8000000,
-        Remote = 4000000,
-        Disconnect = 2000000
+        ModesPruned = 0x8000000,
+        Remote = 0x4000000,
+        Disconnect = 0x2000000
     }
 
     [Flags()]
@@ -35,17 +35,17 @@ public class Flags
     [Flags()]
     public enum ChangeDisplaySettingsFlags : uint
     {
-        None = 0,
-        UpdateRegistry = 1,
-        Test = 2,
-        Fullscreen = 4,
-        Global = 8,
-        SetPrimary = 10,
-        VideoParameters = 20,
-        EnableUnsafeModes = 100,
-        DisableUnsafeModes = 200,
-        Reset = 40000000,
-        ResetEx = 20000000,
-        NoReset = 10000000
+        None = 0x0,
+        UpdateRegistry = 0x00000001,
+        Test = 0x00000002,
+        Fullscreen = 0x00000004,
+        Global = 0x00000008,
+        SetPrimary = 0x00000010,
+        VideoParameters = 0x00000020,
+        EnableUnsafeModes = 0x00000100,
+        DisableUnsafeModes = 0x00000200,
+        Reset = 0x40000000,
+        ResetEx = 0x20000000,
+        NoReset = 0x10000000
     }
 }
