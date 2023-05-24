@@ -18,7 +18,7 @@ public class DisplayDeviceSettings
     /// </summary>
     /// https://www.pinvoke.net/default.aspx/Structures/DEVMODE.html
     /// https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct DEVICE_MODE
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
@@ -29,15 +29,11 @@ public class DisplayDeviceSettings
         public short dmDriverExtra;
         public int dmFields;
 
-        public short dmOrientation;
-        public short dmPaperSize;
-        public short dmPaperLength;
-        public short dmPaperWidth;
+        public int dmPositionX;
+        public int dmPositionY;
+        public int dmDisplayOrientation;
+        public int dmDisplayFixedOutput;
 
-        public short dmScale;
-        public short dmCopies;
-        public short dmDefaultSource;
-        public short dmPrintQuality;
         public short dmColor;
         public short dmDuplex;
         public short dmYResolution;
@@ -49,8 +45,6 @@ public class DisplayDeviceSettings
         public short dmBitsPerPel;
         public int dmPelsWidth;
         public int dmPelsHeight;
-        public Position dmPosition;
-        public int dmDisplayOrientation;
 
         public int dmDisplayFlags;
         public int dmDisplayFrequency;

@@ -70,10 +70,13 @@ Selected Device and mode:");
             });
             return;
         }
-        Console.WriteLine($"Display Test Status: {testStatus}");
+        Console.WriteLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
 
         var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
-        Console.WriteLine($"Display Change Status: {LogDisplayChangeStatus(changeStatus)}");
+        Console.WriteLine($"ChangeDisplayMode: {LogDisplayChangeStatus(changeStatus)}");
+
+        var applyStatus = ApplyChanges();
+        Console.WriteLine($"ApplyChanges: {LogDisplayChangeStatus(applyStatus)}");
     }
 }

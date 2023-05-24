@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using static ResolutionSwitcher.DisplayDevices;
 using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.Flags;
 
@@ -48,7 +49,7 @@ public class ChangeDisplaySettings
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
                                        IntPtr.Zero,
-                                       ChangeDisplaySettingsFlags.UpdateRegistry,
+                                       (ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset),
                                        IntPtr.Zero);
     }
 
@@ -57,11 +58,11 @@ public class ChangeDisplaySettings
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
                                        IntPtr.Zero,
-                                       ChangeDisplaySettingsFlags.SetPrimary | ChangeDisplaySettingsFlags.UpdateRegistry,
+                                       (ChangeDisplaySettingsFlags.SetPrimary | ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset),
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatus ApplyModes()
+    public static DisplayChangeStatus ApplyChanges()
     {
         return ChangeDisplaySettingsEx(null,
                                        IntPtr.Zero,

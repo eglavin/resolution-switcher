@@ -24,14 +24,14 @@ class SelectPrimaryMonitor
 
         var currentDeviceDisplayMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
 
-        var offsetX = currentDeviceDisplayMode.dmPosition.x;
-        var offsetY = currentDeviceDisplayMode.dmPosition.y;
-        currentDeviceDisplayMode.dmPosition.x = 0;
-        currentDeviceDisplayMode.dmPosition.y = 0;
+        var offsetX = currentDeviceDisplayMode.dmPositionX;
+        var offsetY = currentDeviceDisplayMode.dmPositionY;
+        currentDeviceDisplayMode.dmPositionX = 0;
+        currentDeviceDisplayMode.dmPositionY = 0;
 
 
         var newPrimaryMonitorStatus = SetPrimaryDisplay(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
-        Console.WriteLine($"\nSetPrimaryDisplay status ({selectedDevice.Name}): {newPrimaryMonitorStatus}");
+        Console.WriteLine($"\nSetPrimaryDisplay ({selectedDevice.Name}): {LogDisplayChangeStatus(newPrimaryMonitorStatus)}");
 
         var updatedDevices = new List<Object>();
         foreach (var device in otherDevices)
@@ -40,28 +40,35 @@ class SelectPrimaryMonitor
             {
                 var deviceDisplayMode = GetCurrentDisplayMode(device.DisplayDevice.DeviceName).DeviceMode;
 
-                deviceDisplayMode.dmPosition.x -= offsetX;
-                deviceDisplayMode.dmPosition.y -= offsetY;
-
-                updatedDevices.Add(new { device, deviceDisplayMode });
+                deviceDisplayMode.dmPositionX -= offsetX;
+                deviceDisplayMode.dmPositionY -= offsetY;
 
                 var status = ChangeDisplayMode(device.DisplayDevice.DeviceName, deviceDisplayMode);
-                Console.WriteLine($"ChangeDisplayMode status ({device.Name}): {status}");
+                Console.WriteLine($"ChangeDisplayMode ({device.Name}): {LogDisplayChangeStatus(status)}");
+
+                updatedDevices.Add(new
+                {
+                    device,
+                    deviceDisplayMode,
+                    status
+                });
             }
         }
 
 
-        var applyUpdateStatus = ApplyModes();
-        Console.WriteLine($"ApplyModes status: {applyUpdateStatus}");
+        var applyChangesStatus = ApplyChanges();
+        Console.WriteLine($"ApplyChanges: {LogDisplayChangeStatus(applyChangesStatus)}");
 
         logger.WriteOutput(new
         {
             selectedDevice,
             otherDevices,
             currentDeviceDisplayMode,
+            offsetX,
+            offsetY,
             newPrimaryMonitorStatus,
             updatedDevices,
-            applyUpdateStatus,
+            applyChangesStatus,
         });
     }
 }

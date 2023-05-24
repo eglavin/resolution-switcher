@@ -12,11 +12,11 @@ var logger = new Logger("resolution-switcher-cli");
 var displayDevices = GetDisplayDevices();
 displayDevices.ForEach((device) =>
 {
+    // Attach the display mode details to the device
+    device.DisplayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName, true);
+
     if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop))
     {
-        // Attach the display mode details to the device
-        device.DisplayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName, true);
-
         LogDeviceDetails(device);
         Console.WriteLine();
     }
@@ -68,7 +68,7 @@ switch (functionInput)
         break;
     case "2":
         var primaryMonitor = new SelectPrimaryMonitor(logger);
-        primaryMonitor.Run(selectedDevice, 
+        primaryMonitor.Run(selectedDevice,
                            displayDevices.Where((device) => device.Index != selectedDevice.Index).ToList());
         break;
     default:
