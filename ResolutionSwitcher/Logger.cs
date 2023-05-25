@@ -4,20 +4,81 @@ using System.Reflection;
 namespace ResolutionSwitcher;
 public class Logger
 {
-    string FileName { get; set; } = "resolution-switcher";
+    private string FileName { get; set; } = "resolution-switcher";
+    private List<LogHistory> History { get; set; } = new List<LogHistory>();
+    private bool OututToConsole { get; set; } = true;
 
-    public Logger(string? fileName)
+
+    public Logger(string? fileName, bool? outputToConsole = true)
     {
         if (fileName != null)
         {
             FileName = fileName;
         }
-
+        OututToConsole = outputToConsole == true;
     }
 
-    public void WriteOutput(object output)
+
+    #region Models
+
+    public class LogHistory
     {
-        var timestamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+        public DateTime DateTime { get; } = DateTime.UtcNow;
+        public List<object> Details { get; } = new List<object>();
+
+
+        public LogHistory(object? message) => Details.Add(message);
+        public LogHistory(object?[] message) => Details.AddRange(message);
+    }
+
+    #endregion
+
+
+    #region Logging Methods
+
+    public void LogLine(params string?[] lines)
+    {
+        History.Add(new LogHistory(lines));
+
+        if (OututToConsole)
+        {
+            Console.WriteLine(string.Join(" ", lines));
+        }
+    }
+
+    public void Log(string? line)
+    {
+        History.Add(new LogHistory(line));
+
+        if (OututToConsole)
+        {
+            Console.Write(line);
+        }
+    }
+
+    public void AddToHistoryAndLogLine(object? status, params string?[] lines)
+    {
+        History.Add(new LogHistory(status));
+
+        if (lines.Length > 0)
+        {
+            LogLine(lines);
+        }
+    }
+
+    public void AddToHistory(params object?[] status)
+    {
+        History.Add(new LogHistory(status));
+    }
+
+    #endregion
+
+
+    #region Output Handling
+
+    private void WriteOutput(object output)
+    {
+        var timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss");
 
         var directory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\logs";
         var fileDirectory = $"{directory}\\{timestamp}_{FileName}.json";
@@ -43,4 +104,17 @@ public class Logger
             Console.WriteLine(ex.ToString());
         }
     }
+
+    public void SaveLogs(params string?[] line)
+    {
+        if (line.Length > 0)
+        {
+            LogLine(line);
+        }
+
+        WriteOutput(History);
+    }
+
+    #endregion
+
 }

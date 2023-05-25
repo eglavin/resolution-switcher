@@ -4,6 +4,7 @@ public class Flags
     [Flags()]
     public enum DisplayDeviceStateFlags : int
     {
+        Detached = 0x0,
         AttachedToDesktop = 0x1,
         MultiDriver = 0x2,
         PrimaryDevice = 0x4,

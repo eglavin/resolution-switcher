@@ -105,22 +105,22 @@ public class DisplayDevices
         return displayDevices;
     }
 
-    public static void LogDeviceDetails(DisplayDeviceDetails device, bool expanded = false)
+    public static string LogDeviceDetails(DisplayDeviceDetails device, bool expanded = false)
     {
         if (expanded)
         {
-            Console.WriteLine($@"Device ID: {device.Index}
+            return $@"Device ID: {device.Index}
 Name: {device.Name}
 String: {device.DisplayDevice.DeviceString}
 ID: {device.DisplayDevice.DeviceID}
 Key: {device.DisplayDevice.DeviceKey}
-Flags: {device.DisplayDevice.StateFlags}");
+Flags: {device.DisplayDevice.StateFlags}";
         }
         else
         {
-            Console.WriteLine($@"Device ID: {device.Index}
+            return $@"Device ID: {device.Index}
 Name: {device.Name}
-Flags: {device.DisplayDevice.StateFlags}");
+Flags: {device.DisplayDevice.StateFlags}";
         }
 
     }

@@ -15,18 +15,20 @@ class SelectResolution
 
     public void Run(DisplayDeviceDetails selectedDevice)
     {
-        selectedDevice.DisplayModeDetails.ForEach(LogModeDetails);
+        // Log the selected display mode details
+        foreach (var mode in selectedDevice.DisplayModeDetails)
+        {
+            logger.LogLine(LogModeDetails(mode));
+        }
 
 
-        Console.Write("\nEnter the desired display mode id or any key to quit: ");
+        logger.Log("Enter the desired display mode id or any key to quit: ");
         var modeIndexInput = Console.ReadLine();
+
+        logger.AddToHistory(modeIndexInput);
         if (!int.TryParse(modeIndexInput, out _))
         {
-            logger.WriteOutput(new
-            {
-                selectedDevice,
-                modeIndexInput,
-            });
+            logger.SaveLogs();
             return;
         }
 
@@ -34,49 +36,36 @@ class SelectResolution
         var selectedMode = selectedDevice.DisplayModeDetails.Find(
             (mode) => mode.Index.ToString() == modeIndexInput
         );
+        logger.AddToHistoryAndLogLine(selectedMode, "Mode found");
+
         if (selectedMode == null)
         {
-            Console.WriteLine("Mode not found\n");
-
-            logger.WriteOutput(new
-            {
-                selectedDevice,
-                modeIndexInput,
-                selectedMode,
-            });
+            logger.SaveLogs("Mode not found");
             return;
         }
 
 
-        Console.WriteLine(@$"Mode found
-
-Selected Device and mode:");
-        LogDeviceDetails(selectedDevice, true);
-        LogModeDetails(selectedMode);
-        Console.WriteLine();
+        logger.LogLine(@$"Selected Device and mode:",
+                       LogDeviceDetails(selectedDevice, true),
+                       "\n",
+                       LogModeDetails(selectedMode),
+                       "\n");
 
 
         var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
+        logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
+
         if (testStatus != DisplayChangeStatus.Successful)
         {
-            Console.WriteLine("Test failed\n");
-
-            logger.WriteOutput(new
-            {
-                selectedDevice,
-                modeIndexInput,
-                selectedMode,
-                testStatus,
-            });
+            logger.SaveLogs("Test failed");
             return;
         }
-        Console.WriteLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
 
         var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
-        Console.WriteLine($"ChangeDisplayMode: {LogDisplayChangeStatus(changeStatus)}");
+        logger.LogLine($"ChangeDisplayMode: {LogDisplayChangeStatus(changeStatus)}");
 
         var applyStatus = ApplyChanges();
-        Console.WriteLine($"ApplyChanges: {LogDisplayChangeStatus(applyStatus)}");
+        logger.LogLine($"ApplyChanges: {LogDisplayChangeStatus(applyStatus)}");
     }
 }

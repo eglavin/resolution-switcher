@@ -6,12 +6,10 @@ public class DisplayDeviceSettings
     public static int MIN_WIDTH = 800;
     public static int MIN_HEIGHT = 600;
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Position
-    {
-        public int x;
-        public int y;
-    }
+    /// <summary>Retrieve the current display mode.</summary>
+    private static int ENUM_CURRENT_SETTINGS = -1;
+    /// <summary>Retrieve the current display mode saved to the registry.</summary>
+    private static int ENUM_REGISTRY_SETTINGS = -2;
 
     /// <summary>
     /// The DEVMODE structure is used for specifying characteristics of display and print devices in the Unicode (wide) character set.
@@ -31,6 +29,13 @@ public class DisplayDeviceSettings
 
         public int dmPositionX;
         public int dmPositionY;
+        /// <summary>
+        /// Represents the orientation(rotation) of the display. This member can be one of these values: 
+        /// DMDO_DEFAULT = 0 : Display is in the default orientation.
+        /// DMDO_90 = 1 : The display is rotated 90 degrees (measured clockwise) from DMDO_DEFAULT.
+        /// DMDO_180 = 2 : The display is rotated 180 degrees (measured clockwise) from DMDO_DEFAULT.
+        /// DMDO_270 = 3 : The display is rotated 270 degrees (measured clockwise) from DMDO_DEFAULT.
+        /// </summary>
         public int dmDisplayOrientation;
         public int dmDisplayFixedOutput;
 
@@ -95,7 +100,7 @@ public class DisplayDeviceSettings
         DEVICE_MODE deviceMode = new();
         try
         {
-            EnumDisplaySettings(deviceName, -1, ref deviceMode);
+            EnumDisplaySettings(deviceName, ENUM_CURRENT_SETTINGS, ref deviceMode);
         }
         catch (Exception ex)
         {
@@ -141,8 +146,8 @@ public class DisplayDeviceSettings
         return displayModeDetails;
     }
 
-    public static void LogModeDetails(DeviceModeDetails details)
+    public static string LogModeDetails(DeviceModeDetails details)
     {
-        Console.WriteLine($"ID: {details.Index}\t  W: {details.Width}\t  H: {details.Height}");
+        return $"ID: {details.Index}\t  W: {details.Width}\t  H: {details.Height}";
     }
 }

@@ -8,30 +8,24 @@ using ResolutionSwitcherCli;
 
 var logger = new Logger("resolution-switcher-cli");
 
-
 var displayDevices = GetDisplayDevices();
 displayDevices.ForEach((device) =>
 {
     // Attach the display mode details to the device
     device.DisplayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName, true);
-
-    if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop))
-    {
-        LogDeviceDetails(device);
-        Console.WriteLine();
-    }
+    logger.LogLine(LogDeviceDetails(device), "\n");
 });
 
+logger.AddToHistory(displayDevices);
 
-Console.Write("Enter the desired device id or any key to quit: ");
+
+logger.Log("Enter the desired device id or any key to quit: ");
 var deviceIndexInput = Console.ReadLine();
+logger.AddToHistory(deviceIndexInput);
+
 if (!int.TryParse(deviceIndexInput, out _))
 {
-    logger.WriteOutput(new
-    {
-        displayDevices,
-        deviceIndexInput,
-    });
+    logger.SaveLogs();
     return;
 }
 
@@ -39,27 +33,23 @@ if (!int.TryParse(deviceIndexInput, out _))
 var selectedDevice = displayDevices.Find(
     (device) => device.Index.ToString() == deviceIndexInput
 );
+logger.AddToHistory(selectedDevice);
+
 if (selectedDevice == null)
 {
-    Console.WriteLine("Device not found\n");
-
-    logger.WriteOutput(new
-    {
-        displayDevices,
-        deviceIndexInput,
-        selectedDevice,
-    });
+    logger.SaveLogs("Device not found");
     return;
 }
 
 
-Console.Write(@$"Device found
+logger.Log(@$"Device found
 
 -- Options --
 1. Set Resolution
 2. Set Primary Monitor
 Enter the function you want to run: ");
 var functionInput = Console.ReadLine();
+
 switch (functionInput)
 {
     case "1":
@@ -69,18 +59,13 @@ switch (functionInput)
     case "2":
         var primaryMonitor = new SelectPrimaryMonitor(logger);
         primaryMonitor.Run(selectedDevice,
-                           displayDevices.Where((device) => device.Index != selectedDevice.Index).ToList());
+                           displayDevices.Where((device) => device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop) &&
+                                                            device.Index != selectedDevice.Index)
+                                         .ToList());
         break;
     default:
-        Console.WriteLine("Invalid function");
-
-        logger.WriteOutput(new
-        {
-            displayDevices,
-            deviceIndexInput,
-            selectedDevice,
-            functionInput,
-        });
+        logger.LogLine("\nInvalid function:", functionInput);
         break;
 }
 
+logger.SaveLogs();
