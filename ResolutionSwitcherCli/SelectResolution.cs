@@ -28,7 +28,6 @@ class SelectResolution
         logger.AddToHistory(modeIndexInput);
         if (!int.TryParse(modeIndexInput, out _))
         {
-            logger.SaveLogs();
             return;
         }
 
@@ -40,7 +39,7 @@ class SelectResolution
 
         if (selectedMode == null)
         {
-            logger.SaveLogs("Mode not found");
+            logger.LogLine("Mode not found");
             return;
         }
 
@@ -57,7 +56,7 @@ class SelectResolution
 
         if (testStatus != DisplayChangeStatus.Successful)
         {
-            logger.SaveLogs("Test failed");
+            logger.LogLine("Test failed");
             return;
         }
 
