@@ -6,7 +6,7 @@ public class Logger
 {
     private string FileName { get; set; } = "resolution-switcher";
     private List<LogHistory> History { get; set; } = new List<LogHistory>();
-    private bool OututToConsole { get; set; } = true;
+    private bool OutputToConsole { get; set; } = true;
 
 
     public Logger(string? fileName, bool? outputToConsole = true)
@@ -15,7 +15,7 @@ public class Logger
         {
             FileName = fileName;
         }
-        OututToConsole = outputToConsole == true;
+        OutputToConsole = outputToConsole == true;
     }
 
 
@@ -40,7 +40,7 @@ public class Logger
     {
         History.Add(new LogHistory(lines));
 
-        if (OututToConsole)
+        if (OutputToConsole)
         {
             Console.WriteLine(string.Join(" ", lines));
         }
@@ -50,7 +50,7 @@ public class Logger
     {
         History.Add(new LogHistory(line));
 
-        if (OututToConsole)
+        if (OutputToConsole)
         {
             Console.Write(line);
         }
