@@ -1,8 +1,7 @@
-﻿using System.Runtime.InteropServices;
-using ResolutionSwitcher;
+﻿using ResolutionSwitcher;
+using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.DisplayDevices;
 using static ResolutionSwitcher.DisplayDeviceSettings;
-using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.Flags;
 
 namespace ResolutionSwitcherCli;
@@ -23,7 +22,7 @@ class SelectPrimaryMonitor
         }
 
         var currentDeviceDisplayMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
-        logger.AddToHistory(currentDeviceDisplayMode, selectedDevice, otherDevices);
+        logger.AddToHistory(currentDeviceDisplayMode);
 
         var offsetX = currentDeviceDisplayMode.dmPositionX;
         var offsetY = currentDeviceDisplayMode.dmPositionY;
@@ -36,7 +35,7 @@ class SelectPrimaryMonitor
 
         foreach (var device in otherDevices)
         {
-            if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop))
+            if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
             {
                 var deviceDisplayMode = GetCurrentDisplayMode(device.DisplayDevice.DeviceName).DeviceMode;
 
@@ -46,7 +45,7 @@ class SelectPrimaryMonitor
                 var status = ChangeDisplayMode(device.DisplayDevice.DeviceName, deviceDisplayMode);
                 logger.LogLine($"ChangeDisplayMode ({device.Name}): {LogDisplayChangeStatus(status)}");
 
-                logger.AddToHistory(device, deviceDisplayMode);
+                logger.AddToHistory(deviceDisplayMode);
             }
         }
 

@@ -1,23 +1,19 @@
 ﻿using System.Runtime.InteropServices;
+using static ResolutionSwitcher.Flags;
 
 namespace ResolutionSwitcher;
 public class DisplayDeviceSettings
 {
-    public static int MIN_WIDTH = 800;
-    public static int MIN_HEIGHT = 600;
-
-    /// <summary>Retrieve the current display mode.</summary>
-    private static int ENUM_CURRENT_SETTINGS = -1;
-    /// <summary>Retrieve the current display mode saved to the registry.</summary>
-    private static int ENUM_REGISTRY_SETTINGS = -2;
+    private static int MIN_WIDTH = 800;
+    private static int MIN_HEIGHT = 600;
 
     /// <summary>
     /// The DEVMODE structure is used for specifying characteristics of display and print devices in the Unicode (wide) character set.
     /// </summary>
-    /// https://www.pinvoke.net/default.aspx/Structures/DEVMODE.html
     /// https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea
+    /// https://github.com/dotnet/pinvoke/blob/93de9b78bcd8ed84d02901b0556c348fa66257ed/src/Windows.Core/DEVMODE.cs#L14
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    public struct DEVICE_MODE
+    public struct DEVMODE
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string dmDeviceName;
@@ -25,12 +21,12 @@ public class DisplayDeviceSettings
         public short dmDriverVersion;
         public short dmSize;
         public short dmDriverExtra;
-        public int dmFields;
+        public FieldUseFlags dmFields;
 
         public int dmPositionX;
         public int dmPositionY;
         /// <summary>
-        /// Represents the orientation(rotation) of the display. This member can be one of these values: 
+        /// Represents the orientation(rotation) of the display. This member can be one of these values:
         /// DMDO_DEFAULT = 0 : Display is in the default orientation.
         /// DMDO_90 = 1 : The display is rotated 90 degrees (measured clockwise) from DMDO_DEFAULT.
         /// DMDO_180 = 2 : The display is rotated 180 degrees (measured clockwise) from DMDO_DEFAULT.
@@ -67,18 +63,24 @@ public class DisplayDeviceSettings
 
     public class DeviceModeDetails
     {
-        public DeviceModeDetails(int index, DEVICE_MODE deviceMode)
+        public DeviceModeDetails(int index, DEVMODE deviceMode)
         {
             Index = index;
             Width = deviceMode.dmPelsWidth;
             Height = deviceMode.dmPelsHeight;
+            DisplayFrequency = deviceMode.dmDisplayFrequency;
+            BitsPerPixel = deviceMode.dmBitsPerPel;
+            Fields = deviceMode.dmFields.ToString();
             DeviceMode = deviceMode;
         }
 
-        public int Index { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public DEVICE_MODE DeviceMode;
+        public int Index;
+        public int Width;
+        public int Height;
+        public int DisplayFrequency;
+        public short BitsPerPixel;
+        public string Fields;
+        public DEVMODE DeviceMode;
     }
 
 
@@ -93,14 +95,19 @@ public class DisplayDeviceSettings
     [DllImport("user32.dll")]
     private static extern bool EnumDisplaySettings(string lpszDeviceName,
                                                    int iModeNum,
-                                                   ref DEVICE_MODE lpDevMode);
+                                                   ref DEVMODE lpDevMode);
+
+    [DllImport("user32.dll")]
+    private static extern bool EnumDisplaySettings(string lpszDeviceName,
+                                                   EnumDisplayModeFlags iModeNum,
+                                                   ref DEVMODE lpDevMode);
 
     public static DeviceModeDetails GetCurrentDisplayMode(string deviceName)
     {
-        DEVICE_MODE deviceMode = new();
+        DEVMODE deviceMode = new();
         try
         {
-            EnumDisplaySettings(deviceName, ENUM_CURRENT_SETTINGS, ref deviceMode);
+            EnumDisplaySettings(deviceName, EnumDisplayModeFlags.CurrentSettings, ref deviceMode);
         }
         catch (Exception ex)
         {
@@ -114,7 +121,7 @@ public class DisplayDeviceSettings
         List<DeviceModeDetails> displayModeDetails = new();
         try
         {
-            DEVICE_MODE deviceMode = new();
+            DEVMODE deviceMode = new();
 
             for (int index = 0; EnumDisplaySettings(deviceName, index, ref deviceMode); index++)
             {
@@ -144,10 +151,5 @@ public class DisplayDeviceSettings
         }
 
         return displayModeDetails;
-    }
-
-    public static string LogModeDetails(DeviceModeDetails details)
-    {
-        return $"ID: {details.Index}\t  W: {details.Width}\t  H: {details.Height}";
     }
 }

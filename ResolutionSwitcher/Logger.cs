@@ -27,8 +27,12 @@ public class Logger
         public List<object> Details { get; } = new List<object>();
 
 
+#pragma warning disable CS8604 // Possible null reference argument.
         public LogHistory(object? message) => Details.Add(message);
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+#pragma warning restore CS8604 // Possible null reference argument.
         public LogHistory(object?[] message) => Details.AddRange(message);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
     }
 
     #endregion
@@ -42,7 +46,15 @@ public class Logger
 
         if (OutputToConsole)
         {
-            Console.WriteLine(string.Join(" ", lines));
+            foreach (var line in lines)
+            {
+                if (line == "\n")
+                {
+                    Console.WriteLine();
+                    continue;
+                }
+                Console.WriteLine(line);
+            }
         }
     }
 

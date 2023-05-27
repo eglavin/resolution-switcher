@@ -1,8 +1,8 @@
 ﻿using ResolutionSwitcher;
-using static ResolutionSwitcher.DisplayDevices;
-using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.ChangeDisplaySettings;
+using static ResolutionSwitcher.DisplayDevices;
 using static ResolutionSwitcher.Flags;
+using static ResolutionSwitcherCli.Utils;
 
 namespace ResolutionSwitcherCli;
 class SelectResolution
@@ -15,14 +15,15 @@ class SelectResolution
 
     public void Run(DisplayDeviceDetails selectedDevice)
     {
+        logger.LogLine("\nSelect the id of the mode you want to apply: ", GetModeHead());
         // Log the selected display mode details
         foreach (var mode in selectedDevice.DisplayModeDetails)
         {
-            logger.LogLine(LogModeDetails(mode));
+            logger.LogLine(GetModeRow(mode));
         }
 
 
-        logger.Log("Enter the desired display mode id or any key to quit: ");
+        logger.Log("\nEnter the desired display mode id or any key to quit: ");
         var modeIndexInput = Console.ReadLine();
 
         logger.AddToHistory(modeIndexInput);
@@ -45,9 +46,10 @@ class SelectResolution
 
 
         logger.LogLine(@$"Selected Device and mode:",
-                       LogDeviceDetails(selectedDevice, true),
                        "\n",
-                       LogModeDetails(selectedMode),
+                       GetDeviceDetails(selectedDevice, true),
+                       GetModeHead(),
+                       GetModeRow(selectedMode),
                        "\n");
 
 

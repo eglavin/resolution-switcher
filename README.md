@@ -20,6 +20,8 @@
 ## References
 
 - [Code Project - Changing Display Settings Programmatically](https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically)
+- [Github - dahall / Vanara](https://github.com/dahall/Vanara)
+- [Github - dotnet / pinvoke](https://github.com/dotnet/pinvoke)
 - [Github - Grunge / setDisplayRes](https://github.com/Grunge/setDisplayRes)
 - [Github - timmui / ScreenResolutionChanger](https://github.com/timmui/ScreenResolutionChanger/tree/master)
 - [Github - VFPX / Win32API](https://github.com/VFPX/Win32API/blob/master/libraries/user32)

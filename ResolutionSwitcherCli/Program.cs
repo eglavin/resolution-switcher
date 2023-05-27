@@ -1,9 +1,9 @@
-﻿using static ResolutionSwitcher.DisplayDevices;
-using static ResolutionSwitcher.DisplayDeviceSettings;
-using static ResolutionSwitcher.ChangeDisplaySettings;
-using static ResolutionSwitcher.Flags;
-using ResolutionSwitcher;
+﻿using ResolutionSwitcher;
 using ResolutionSwitcherCli;
+using static ResolutionSwitcher.DisplayDevices;
+using static ResolutionSwitcher.DisplayDeviceSettings;
+using static ResolutionSwitcher.Flags;
+using static ResolutionSwitcherCli.Utils;
 
 
 var logger = new Logger("resolution-switcher-cli");
@@ -13,7 +13,7 @@ displayDevices.ForEach((device) =>
 {
     // Attach the display mode details to the device
     device.DisplayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName, true);
-    logger.LogLine(LogDeviceDetails(device), "\n");
+    logger.LogLine(GetDeviceDetails(device), "\n");
 });
 
 logger.AddToHistory(displayDevices);
@@ -47,6 +47,7 @@ logger.Log(@$"Device found
 -- Options --
 1. Set Resolution
 2. Set Primary Monitor
+3. Detach Monitor
 Enter the function you want to run: ");
 var functionInput = Console.ReadLine();
 
@@ -59,9 +60,13 @@ switch (functionInput)
     case "2":
         var primaryMonitor = new SelectPrimaryMonitor(logger);
         primaryMonitor.Run(selectedDevice,
-                           displayDevices.Where((device) => device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop) &&
+                           displayDevices.Where((device) => device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop) &&
                                                             device.Index != selectedDevice.Index)
                                          .ToList());
+        break;
+    case "3":
+        var detachMonitor = new DetachMonitor(logger);
+        detachMonitor.Run(selectedDevice);
         break;
     default:
         logger.LogLine("\nInvalid function:", functionInput);

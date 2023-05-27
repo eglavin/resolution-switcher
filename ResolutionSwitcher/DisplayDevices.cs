@@ -9,6 +9,7 @@ public class DisplayDevices
     /// The DISPLAY_DEVICE structure receives information about the display device specified by the iDevNum parameter of the EnumDisplayDevices function.
     /// </summary>
     /// https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-display_devicea
+    /// https://github.com/dotnet/pinvoke/blob/93de9b78bcd8ed84d02901b0556c348fa66257ed/src/Windows.Core/DISPLAY_DEVICE.cs
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct DISPLAY_DEVICE
     {
@@ -34,7 +35,7 @@ public class DisplayDevices
         /// Device state flags. It can be any reasonable combination of the following.
         /// </summary>
         [MarshalAs(UnmanagedType.U4)]
-        public DisplayDeviceStateFlags StateFlags;
+        public DisplayDeviceFlags StateFlags;
 
         /// <summary>
         /// Not used.
@@ -57,14 +58,16 @@ public class DisplayDevices
             Index = index;
             Name = device.DeviceName.Split("\\\\.\\").Last();
             Number = Convert.ToInt32(device.DeviceName.Split("DISPLAY").Last());
+            State = device.StateFlags.ToString();
             DisplayDevice = device;
         }
 
-        public uint Index { get; set; }
-        public string Name { get; set; }
-        public int Number { get; set; }
-        public DISPLAY_DEVICE DisplayDevice { get; set; }
-        public List<DeviceModeDetails> DisplayModeDetails { get; set; } = new List<DeviceModeDetails>();
+        public uint Index;
+        public string Name;
+        public int Number;
+        public string State;
+        public DISPLAY_DEVICE DisplayDevice;
+        public List<DeviceModeDetails> DisplayModeDetails = new List<DeviceModeDetails>();
     }
 
     /// <summary>
@@ -103,25 +106,5 @@ public class DisplayDevices
         }
 
         return displayDevices;
-    }
-
-    public static string LogDeviceDetails(DisplayDeviceDetails device, bool expanded = false)
-    {
-        if (expanded)
-        {
-            return $@"Device ID: {device.Index}
-Name: {device.Name}
-String: {device.DisplayDevice.DeviceString}
-ID: {device.DisplayDevice.DeviceID}
-Key: {device.DisplayDevice.DeviceKey}
-Flags: {device.DisplayDevice.StateFlags}";
-        }
-        else
-        {
-            return $@"Device ID: {device.Index}
-Name: {device.Name}
-Flags: {device.DisplayDevice.StateFlags}";
-        }
-
     }
 }

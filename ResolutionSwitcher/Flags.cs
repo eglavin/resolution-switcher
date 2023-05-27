@@ -2,7 +2,7 @@
 public class Flags
 {
     [Flags()]
-    public enum DisplayDeviceStateFlags : int
+    public enum DisplayDeviceFlags : int
     {
         Detached = 0x0,
         AttachedToDesktop = 0x1,
@@ -51,8 +51,9 @@ public class Flags
     }
 
     [Flags()]
-    public enum DeviceModeFlags : int
+    public enum FieldUseFlags : uint
     {
+        None = 0,
         Orientation = 0x1,
         PaperSize = 0x2,
         PaperLength = 0x4,
@@ -83,5 +84,14 @@ public class Flags
         PanningWidth = 0x8000000,
         PanningHeight = 0x10000000,
         DisplayFixedOutput = 0x20000000
+    }
+
+    [Flags()]
+    public enum EnumDisplayModeFlags : int
+    {
+        /// <summary>Retrieve the current display mode.</summary>
+        CurrentSettings = -1,
+        /// <summary>Retrieve the current display mode saved to the registry.</summary>
+        RegistrySettings = -2,
     }
 }

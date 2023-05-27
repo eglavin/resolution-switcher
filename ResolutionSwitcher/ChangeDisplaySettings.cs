@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using static ResolutionSwitcher.DisplayDevices;
+﻿using System.Runtime.InteropServices;
 using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.Flags;
 
@@ -20,7 +18,7 @@ public class ChangeDisplaySettings
     /// <returns></returns>
     [DllImport("user32.dll")]
     private static extern DisplayChangeStatus ChangeDisplaySettingsEx(string lpszDeviceName,
-                                                                      ref DEVICE_MODE lpDevMode,
+                                                                      ref DEVMODE lpDevMode,
                                                                       IntPtr hwnd,
                                                                       ChangeDisplaySettingsFlags dwflags,
                                                                       IntPtr lParam);
@@ -35,7 +33,7 @@ public class ChangeDisplaySettings
                                                                       ChangeDisplaySettingsFlags dwflags,
                                                                       IntPtr lParam);
 
-    public static DisplayChangeStatus TestDisplayMode(string deviceName, DEVICE_MODE deviceMode)
+    public static DisplayChangeStatus TestDisplayMode(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
@@ -44,7 +42,7 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatus ChangeDisplayMode(string deviceName, DEVICE_MODE deviceMode)
+    public static DisplayChangeStatus ChangeDisplayMode(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
@@ -53,7 +51,7 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatus SetPrimaryDisplay(string deviceName, DEVICE_MODE deviceMode)
+    public static DisplayChangeStatus SetPrimaryDisplay(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
