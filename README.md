@@ -27,4 +27,5 @@
 - [Github - VFPX / Win32API](https://github.com/VFPX/Win32API/blob/master/libraries/user32)
 - [Microsoft - ChangeDisplaySettingsExA function (winuser.h)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa)
 - [Pinvoke](http://www.pinvoke.net)
+- [StackOverflow - C++ application to detach secondary monitor](https://stackoverflow.com/a/33746637/9325206)
 - [StackOverflow - Use Windows API from C# to set primary monitor](https://stackoverflow.com/a/36968861/9325206)
