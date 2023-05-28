@@ -28,12 +28,12 @@ Flags: {device.DisplayDevice.StateFlags}";
 
     public static string GetModeHead()
     {
-        return @$"{String.Format("|{0,6}|{1,8}|{2,9}|{3,15}|", "Id", "Width", "Height", "Refresh Rate")}
-{String.Format("|{0,6}|{1,8}|{2,9}|{3,15}|", "-----", "-----", "-----", "-----")}";
+        return @$"{String.Format("|{0,6}|{1,8}|{2,9}|", "Id", "Width", "Height")}
+{String.Format("|{0,6}|{1,8}|{2,9}|", "-----", "-----", "-----")}";
     }
 
     public static string GetModeRow(DeviceModeDetails mode)
     {
-        return String.Format("|{0,6}|{1,8}|{2,9}|{3,15}|", mode.Index, mode.Width, mode.Height, mode.DisplayFrequency);
+        return String.Format("|{0,6}|{1,8}|{2,9}|", mode.Index, mode.Width, mode.Height);
     }
 }

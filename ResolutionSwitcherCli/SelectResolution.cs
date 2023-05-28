@@ -1,6 +1,7 @@
 ﻿using ResolutionSwitcher;
 using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.DisplayDevices;
+using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.Flags;
 using static ResolutionSwitcherCli.Utils;
 
@@ -45,15 +46,19 @@ class SelectResolution
         }
 
 
+        var currentMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName);
+        currentMode.DeviceMode.dmPelsWidth = selectedMode.DeviceMode.dmPelsWidth;
+        currentMode.DeviceMode.dmPelsHeight = selectedMode.DeviceMode.dmPelsHeight;
+        currentMode.DeviceMode.dmFields = FieldUseFlags.PelsWidth | FieldUseFlags.PelsHeight;
+
         logger.LogLine(@$"Selected Device and mode:",
                        "\n",
                        GetDeviceDetails(selectedDevice, true),
                        GetModeHead(),
-                       GetModeRow(selectedMode),
+                       GetModeRow(currentMode),
                        "\n");
 
-
-        var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
+        var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentMode.DeviceMode);
         logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
         if (testStatus != DisplayChangeStatus.Successful)
@@ -63,7 +68,7 @@ class SelectResolution
         }
 
 
-        var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, selectedMode.DeviceMode);
+        var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentMode.DeviceMode);
         logger.LogLine($"ChangeDisplayMode: {LogDisplayChangeStatus(changeStatus)}");
 
         var applyStatus = ApplyChanges();
