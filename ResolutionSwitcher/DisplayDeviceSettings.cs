@@ -66,20 +66,15 @@ public class DisplayDeviceSettings
         public DeviceModeDetails(int index, DEVMODE deviceMode)
         {
             Index = index;
-            Width = deviceMode.dmPelsWidth;
-            Height = deviceMode.dmPelsHeight;
-            DisplayFrequency = deviceMode.dmDisplayFrequency;
-            BitsPerPixel = deviceMode.dmBitsPerPel;
-            Fields = deviceMode.dmFields.ToString();
             DeviceMode = deviceMode;
         }
 
         public int Index;
-        public int Width;
-        public int Height;
-        public int DisplayFrequency;
-        public short BitsPerPixel;
-        public string Fields;
+        public int Width { get => DeviceMode.dmPelsWidth; }
+        public int Height { get => DeviceMode.dmPelsHeight; }
+        public int DisplayFrequency { get => DeviceMode.dmDisplayFrequency; }
+        public short BitsPerPixel { get => DeviceMode.dmBitsPerPel; }
+        public string Fields { get => DeviceMode.dmFields.ToString(); }
         public DEVMODE DeviceMode;
     }
 

@@ -56,16 +56,13 @@ public class DisplayDevices
         public DisplayDeviceDetails(uint index, DISPLAY_DEVICE device)
         {
             Index = index;
-            Name = device.DeviceName.Split("\\\\.\\").Last();
-            Number = Convert.ToInt32(device.DeviceName.Split("DISPLAY").Last());
-            State = device.StateFlags.ToString();
             DisplayDevice = device;
         }
 
         public uint Index;
-        public string Name;
-        public int Number;
-        public string State;
+        public string Name { get => DisplayDevice.DeviceName.Split("\\\\.\\").Last(); }
+        public int Number { get => Convert.ToInt32(DisplayDevice.DeviceName.Split("DISPLAY").Last());  }
+        public string State { get => DisplayDevice.StateFlags.ToString(); }
         public DISPLAY_DEVICE DisplayDevice;
         public List<DeviceModeDetails> DisplayModeDetails = new List<DeviceModeDetails>();
     }
