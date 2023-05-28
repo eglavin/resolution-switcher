@@ -47,7 +47,7 @@ public class ChangeDisplaySettings
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
                                        IntPtr.Zero,
-                                       (ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset),
+                                       ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset ,
                                        IntPtr.Zero);
     }
 
