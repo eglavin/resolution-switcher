@@ -48,6 +48,7 @@ logger.Log(@$"Device found
 1. Set Resolution
 2. Set Primary Monitor
 3. Detach Monitor
+4. Attach Monitor
 Enter the function you want to run: ");
 var functionInput = Console.ReadLine();
 
@@ -67,6 +68,10 @@ switch (functionInput)
     case "3":
         var detachMonitor = new DetachMonitor(logger);
         detachMonitor.Run(selectedDevice);
+        break;
+    case "4":
+        var attachMonitor = new AttachMonitor(logger);
+        attachMonitor.Run(selectedDevice);
         break;
     default:
         logger.LogLine("\nInvalid function:", functionInput);
