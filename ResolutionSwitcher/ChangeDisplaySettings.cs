@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.Flags;
+using static ResolutionSwitcher.Structs;
 
 namespace ResolutionSwitcher;
 public class ChangeDisplaySettings
