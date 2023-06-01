@@ -19,8 +19,7 @@ class AttachMonitor
     {
         if (selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
         {
-            logger.LogLine("Device already attached");
-            return;
+            throw new Exception("Device already attached");
         }
 
         var desktopContext = GetDesktopDC();
@@ -44,8 +43,7 @@ class AttachMonitor
 
         if (testStatus != DisplayChangeStatus.Successful)
         {
-            logger.LogLine("Test failed");
-            return;
+            throw new Exception("Test failed");
         }
 
 

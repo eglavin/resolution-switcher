@@ -24,13 +24,13 @@ class SelectResolution
         }
 
 
-        logger.Log("\nEnter the desired display mode id or any key to quit: ");
+        logger.Log("\nEnter the desired display mode id: ");
         var modeIndexInput = Console.ReadLine();
 
         logger.AddToHistory(modeIndexInput);
         if (!int.TryParse(modeIndexInput, out _))
         {
-            return;
+            throw new Exception($"Unable to parse input: {modeIndexInput}");
         }
 
 
@@ -41,8 +41,7 @@ class SelectResolution
 
         if (selectedMode == null)
         {
-            logger.LogLine("Mode not found");
-            return;
+            throw new Exception("Mode not found");
         }
 
 
@@ -62,8 +61,7 @@ class SelectResolution
 
         if (testStatus != DisplayChangeStatus.Successful)
         {
-            logger.LogLine("Test failed");
-            return;
+            throw new Exception("Test failed");
         }
 
 

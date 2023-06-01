@@ -1,4 +1,5 @@
-﻿using static ResolutionSwitcher.DisplayDevices;
+﻿using ResolutionSwitcher;
+using static ResolutionSwitcher.DisplayDevices;
 using static ResolutionSwitcher.DisplayDeviceSettings;
 
 namespace ResolutionSwitcherCli;
@@ -35,5 +36,28 @@ Flags: {device.DisplayDevice.StateFlags}";
     public static string GetModeRow(DeviceModeDetails mode)
     {
         return String.Format("|{0,6}|{1,8}|{2,9}|", mode.Index, mode.Width, mode.Height);
+    }
+
+    public static DisplayDeviceDetails AskUserToSelectDevice(List<DisplayDeviceDetails> displayDevices, Logger logger)
+    {
+        logger.Log("Enter the desired device id: ");
+        var deviceIndexInput = Console.ReadLine();
+        logger.AddToHistory(deviceIndexInput);
+
+        // Ensure input is at lease a int value.
+        if (!int.TryParse(deviceIndexInput, out _))
+        {
+            throw new Exception("Unable to parse input.");
+        }
+
+        var selectedDevice = displayDevices.Find((device) => device.Index.ToString() == deviceIndexInput);
+        logger.AddToHistory(selectedDevice);
+
+        if (selectedDevice == null)
+        {
+            throw new Exception("Unable to find device.");
+        }
+
+        return selectedDevice;
     }
 }

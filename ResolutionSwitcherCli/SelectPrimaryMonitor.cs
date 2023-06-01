@@ -17,8 +17,7 @@ class SelectPrimaryMonitor
     {
         if (otherDevices.Count == 0)
         {
-            logger.LogLine("No other devices found, primary already set");
-            return;
+            throw new Exception("No other devices found, primary already set");
         }
 
         var currentDeviceDisplayMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;

@@ -17,16 +17,13 @@ class DetachMonitor
     {
         if (!selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
         {
-            logger.LogLine("Device already detached");
-            return;
+            throw new Exception("Device already detached");
         }
 
         if (selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.PrimaryDevice))
         {
-            logger.LogLine("Device is the primary monitor");
-
             // TODO: Set primary monitor to the next available monitor
-            return;
+            throw new Exception("Device is the primary monitor");
         }
 
         var currentDeviceDisplayMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
@@ -45,8 +42,7 @@ class DetachMonitor
 
         if (testStatus != DisplayChangeStatus.Successful)
         {
-            logger.LogLine("Test failed");
-            return;
+            throw new Exception("Test failed");
         }
 
         var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
