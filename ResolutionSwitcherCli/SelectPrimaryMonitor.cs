@@ -20,6 +20,11 @@ class SelectPrimaryMonitor
             throw new Exception("No other devices found, primary already set");
         }
 
+        if (!selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
+        {
+            throw new Exception("Device not connected.");
+        }
+
         var currentDeviceDisplayMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
         logger.AddToHistory(currentDeviceDisplayMode);
 
