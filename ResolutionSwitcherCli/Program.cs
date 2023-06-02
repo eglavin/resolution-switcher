@@ -29,6 +29,13 @@ Enter the function you want to run: ");
     {
         // Attach the display mode details to the device
         device.DisplayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName, true);
+
+        if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
+        {
+            var currentDisplayMode = GetCurrentDisplayMode(device.DisplayDevice.DeviceName);
+            db.AddDisplay(device.DisplayDevice.DeviceName, currentDisplayMode.DeviceMode);
+        }
+
         if (functionInput != "0")
         {
             logger.LogLine(GetDeviceDetails(device), "\n");
