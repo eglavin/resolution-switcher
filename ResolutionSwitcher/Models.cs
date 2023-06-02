@@ -3,14 +3,24 @@
 namespace ResolutionSwitcher;
 public class Models
 {
-    public class DeviceModeDetails
+    public class DisplayDeviceDetails
     {
-        public DeviceModeDetails(int index, DEVMODE deviceMode)
+        public uint Index;
+        public string Name { get => DisplayDevice.DeviceName.Split("\\\\.\\").Last(); }
+        public int Number { get => Convert.ToInt32(DisplayDevice.DeviceName.Split("DISPLAY").Last()); }
+        public string State { get => DisplayDevice.StateFlags.ToString(); }
+        public DISPLAY_DEVICE DisplayDevice;
+        public List<DeviceModeDetails> DisplayModeDetails = new();
+
+        public DisplayDeviceDetails(uint index, DISPLAY_DEVICE device)
         {
             Index = index;
-            DeviceMode = deviceMode;
+            DisplayDevice = device;
         }
+    }
 
+    public class DeviceModeDetails
+    {
         public int Index;
         public int Width { get => DeviceMode.dmPelsWidth; }
         public int Height { get => DeviceMode.dmPelsHeight; }
@@ -18,21 +28,11 @@ public class Models
         public short BitsPerPixel { get => DeviceMode.dmBitsPerPel; }
         public string Fields { get => DeviceMode.dmFields.ToString(); }
         public DEVMODE DeviceMode;
-    }
 
-    public class DisplayDeviceDetails
-    {
-        public DisplayDeviceDetails(uint index, DISPLAY_DEVICE device)
+        public DeviceModeDetails(int index, DEVMODE deviceMode)
         {
             Index = index;
-            DisplayDevice = device;
+            DeviceMode = deviceMode;
         }
-
-        public uint Index;
-        public string Name { get => DisplayDevice.DeviceName.Split("\\\\.\\").Last(); }
-        public int Number { get => Convert.ToInt32(DisplayDevice.DeviceName.Split("DISPLAY").Last()); }
-        public string State { get => DisplayDevice.StateFlags.ToString(); }
-        public DISPLAY_DEVICE DisplayDevice;
-        public List<DeviceModeDetails> DisplayModeDetails = new();
     }
 }

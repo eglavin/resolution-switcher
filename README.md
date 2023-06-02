@@ -21,11 +21,13 @@
 
 - [Code Project - Changing Display Settings Programmatically](https://www.codeproject.com/Articles/36664/Changing-Display-Settings-Programmatically)
 - [Github - dahall / Vanara](https://github.com/dahall/Vanara)
+- [Github - dotnet / docs (HelloWorldSample)](https://github.com/dotnet/docs/blob/main/samples/snippets/standard/data/sqlite/HelloWorldSample/Program.cs)
 - [Github - dotnet / pinvoke](https://github.com/dotnet/pinvoke)
 - [Github - Grunge / setDisplayRes](https://github.com/Grunge/setDisplayRes)
 - [Github - timmui / ScreenResolutionChanger](https://github.com/timmui/ScreenResolutionChanger/tree/master)
 - [Github - VFPX / Win32API](https://github.com/VFPX/Win32API/blob/master/libraries/user32)
 - [Microsoft - ChangeDisplaySettingsExA function (winuser.h)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa)
+- [Microsoft - Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?view=azure-dotnet&tabs=visual-studio)
 - [Pinvoke](http://www.pinvoke.net)
 - [StackOverflow - C++ application to detach secondary monitor](https://stackoverflow.com/a/33746637/9325206)
 - [StackOverflow - Use Windows API from C# to set primary monitor](https://stackoverflow.com/a/36968861/9325206)

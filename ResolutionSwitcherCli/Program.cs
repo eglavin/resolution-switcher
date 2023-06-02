@@ -6,7 +6,9 @@ using static ResolutionSwitcher.Flags;
 using static ResolutionSwitcherCli.Utils;
 
 
+var db = new DB();
 var logger = new Logger("resolution-switcher-cli");
+
 try
 {
 
@@ -89,3 +91,4 @@ catch (Exception ex)
 }
 
 logger.SaveLogs();
+db.Close();
