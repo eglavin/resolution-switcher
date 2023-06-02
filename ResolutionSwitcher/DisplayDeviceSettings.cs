@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using static ResolutionSwitcher.Flags;
+using static ResolutionSwitcher.Models;
 using static ResolutionSwitcher.Structs;
 
 namespace ResolutionSwitcher;
@@ -7,24 +8,6 @@ public class DisplayDeviceSettings
 {
     private static int MIN_WIDTH = 800;
     private static int MIN_HEIGHT = 600;
-
-    public class DeviceModeDetails
-    {
-        public DeviceModeDetails(int index, DEVMODE deviceMode)
-        {
-            Index = index;
-            DeviceMode = deviceMode;
-        }
-
-        public int Index;
-        public int Width { get => DeviceMode.dmPelsWidth; }
-        public int Height { get => DeviceMode.dmPelsHeight; }
-        public int DisplayFrequency { get => DeviceMode.dmDisplayFrequency; }
-        public short BitsPerPixel { get => DeviceMode.dmBitsPerPel; }
-        public string Fields { get => DeviceMode.dmFields.ToString(); }
-        public DEVMODE DeviceMode;
-    }
-
 
     /// <summary>
     /// The EnumDisplaySettings function retrieves information about one of the graphics modes for a display device.

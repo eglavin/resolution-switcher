@@ -1,8 +1,8 @@
 ﻿using ResolutionSwitcher;
 using static ResolutionSwitcher.ChangeDisplaySettings;
-using static ResolutionSwitcher.DisplayDevices;
 using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.Flags;
+using static ResolutionSwitcher.Models;
 using static ResolutionSwitcherCli.Utils;
 
 namespace ResolutionSwitcherCli;

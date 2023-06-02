@@ -1,5 +1,5 @@
 ﻿using ResolutionSwitcher;
-using static ResolutionSwitcher.DisplayDevices;
+using static ResolutionSwitcher.Models;
 using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.Flags;

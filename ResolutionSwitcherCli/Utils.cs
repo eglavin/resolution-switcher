@@ -1,9 +1,7 @@
 ﻿using ResolutionSwitcher;
-using static ResolutionSwitcher.DisplayDevices;
-using static ResolutionSwitcher.DisplayDeviceSettings;
+using static ResolutionSwitcher.Models;
 
 namespace ResolutionSwitcherCli;
-
 static class Utils
 {
 
