@@ -4,7 +4,7 @@ using static ResolutionSwitcher.Structs;
 namespace ResolutionSwitcher;
 public class DB
 {
-    private SqliteConnection _connection;
+    private readonly SqliteConnection _connection;
 
     public DB()
     {
@@ -48,6 +48,94 @@ public class DB
         ";
 
         command.ExecuteNonQuery();
+    }
+
+    public class Display
+    {
+        public int Id { get; set; }
+        public int ModeId { get; set; }
+        public string DisplayName { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Frequency { get; set; }
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        public bool IsPrimary { get; set; }
+
+        public Display(int id, int modeId, string displayName, int width, int height, int frequency, int positionX, int positionY, bool isPrimary)
+        {
+            Id = id;
+            ModeId = modeId;
+            DisplayName = displayName;
+            Width = width;
+            Height = height;
+            Frequency = frequency;
+            PositionX = positionX;
+            PositionY = positionY;
+            IsPrimary = isPrimary;
+        }
+    }
+
+    public class Mode
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<Display> Displays { get; set; }
+
+        public Mode(int id, string name)
+        {
+            Id = id;
+            Name = name;
+            Displays = new List<Display>();
+        }
+    }
+
+    public List<Mode> GetDisplayModes()
+    {
+        var command = _connection.CreateCommand();
+
+        command.CommandText = @"
+            SELECT
+                Modes.Id, Modes.Name, Displays.Id, Displays.DisplayName, Displays.Width, Displays.Height, Displays.Frequency, Displays.PositionX, Displays.PositionY, Displays.IsPrimary
+            FROM
+                Modes
+            INNER JOIN Displays
+            ON Modes.Id = Displays.ModeId
+            ORDER BY Modes.Id, Displays.Id;
+        ";
+
+        var displayModes = new List<Mode>();
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var modeId = reader.GetInt32(0);
+            var modeName = reader.GetString(1);
+            var displayId = reader.GetInt32(2);
+            var displayName = reader.GetString(3);
+            var width = reader.GetInt32(4);
+            var height = reader.GetInt32(5);
+            var frequency = reader.GetInt32(6);
+            var positionX = reader.GetInt32(7);
+            var positionY = reader.GetInt32(8);
+            var isPrimary = reader.GetInt32(9) == 1;
+
+
+            var displayModeIndex = displayModes.FindIndex((dm) => dm.Id == modeId);
+
+            if (displayModeIndex == -1)
+            {
+                var mode = new Mode(modeId, modeName);
+                mode.Displays.Add(new Display(displayId, modeId, displayName, width, height, frequency, positionX, positionY, isPrimary));
+                displayModes.Add(mode);
+            }
+            else
+            {
+                displayModes[displayModeIndex].Displays.Add(new Display(displayId, modeId, displayName, width, height, frequency, positionX, positionY, isPrimary));
+            }
+        }
+
+        return displayModes;
     }
 
     private long? GetLastInsertId()
@@ -108,5 +196,84 @@ public class DB
         command.ExecuteNonQuery();
 
         return GetLastInsertId();
+    }
+
+
+    public void UpdateMode(int modeId, string name)
+    {
+        var command = _connection.CreateCommand();
+
+        command.CommandText = @"
+            UPDATE Modes
+            SET
+                Name = $name
+            WHERE
+                Id = $modeId;
+        ";
+
+        command.Parameters.AddWithValue("$modeId", modeId);
+        command.Parameters.AddWithValue("$name", name);
+
+        command.ExecuteNonQuery();
+    }
+
+    public void UpdateDisplay(int displayId, int modeId, string displayName, DEVMODE mode, bool isPrimary)
+    {
+        var command = _connection.CreateCommand();
+
+        command.CommandText = @"
+            UPDATE Displays
+            SET
+                ModeId = $modeId,
+                DisplayName = $displayName,
+                Width = $width,
+                Height = $height,
+                Frequency = $frequency,
+                PositionX = $positionX,
+                PositionY = $positionY,
+                IsPrimary = $isPrimary
+            WHERE
+                Id = $displayId;
+        ";
+
+        command.Parameters.AddWithValue("$displayId", displayId);
+        command.Parameters.AddWithValue("$modeId", modeId);
+        command.Parameters.AddWithValue("$displayName", displayName);
+        command.Parameters.AddWithValue("$width", mode.dmPelsWidth);
+        command.Parameters.AddWithValue("$height", mode.dmPelsHeight);
+        command.Parameters.AddWithValue("$frequency", mode.dmDisplayFrequency);
+        command.Parameters.AddWithValue("$positionX", mode.dmPositionX);
+        command.Parameters.AddWithValue("$positionY", mode.dmPositionY);
+        command.Parameters.AddWithValue("$isPrimary", isPrimary ? 1 : 0);
+
+        command.ExecuteNonQuery();
+    }
+
+    public void DeleteMode(int modeId)
+    {
+        var command = _connection.CreateCommand();
+
+        command.CommandText = @"
+            DELETE FROM Modes
+            WHERE Id = $modeId;
+        ";
+
+        command.Parameters.AddWithValue("$modeId", modeId);
+
+        command.ExecuteNonQuery();
+    }
+
+    public void DeleteDisplay(int displayId)
+    {
+        var command = _connection.CreateCommand();
+
+        command.CommandText = @"
+            DELETE FROM Displays
+            WHERE Id = $displayId;
+        ";
+
+        command.Parameters.AddWithValue("$displayId", displayId);
+
+        command.ExecuteNonQuery();
     }
 }

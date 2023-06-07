@@ -11,8 +11,26 @@ var logger = new Logger("resolution-switcher-cli");
 
 try
 {
+    var modes = db.GetDisplayModes();
 
-    logger.Log(@$"-- Options --
+    if (modes.Count != 0)
+    {
+        logger.LogLine("Saved Display Modes:");
+
+        modes.ForEach((mode) =>
+        {
+            logger.LogLine($"Id: {mode.Id} Name: {mode.Name}");
+
+            mode.Displays.ForEach((display) =>
+            {
+                logger.LogLine($"  Id: {display.Id} Name: {display.DisplayName} Width: {display.Width} Height: {display.Height} Frequency: {display.Frequency} Position X: {display.PositionX} Position Y: {display.PositionY} Primary: {display.IsPrimary}");
+            });
+        });
+    }
+
+
+    logger.Log(@$"
+-- Options --
 0. Get All Device Settings
 1. Set Resolution
 2. Set Primary Monitor
