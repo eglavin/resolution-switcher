@@ -110,4 +110,3 @@ catch (Exception ex)
 }
 
 logger.SaveLogs();
-db.Close();

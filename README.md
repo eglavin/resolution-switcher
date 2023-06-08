@@ -27,6 +27,7 @@
 - [Github - timmui / ScreenResolutionChanger](https://github.com/timmui/ScreenResolutionChanger/tree/master)
 - [Github - VFPX / Win32API](https://github.com/VFPX/Win32API/blob/master/libraries/user32)
 - [Microsoft - ChangeDisplaySettingsExA function (winuser.h)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa)
+- [Microsoft - Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=visual-studio)
 - [Microsoft - Microsoft.Data.Sqlite overview](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?view=azure-dotnet&tabs=visual-studio)
 - [Pinvoke](http://www.pinvoke.net)
 - [SQLite Tutorial](https://www.sqlitetutorial.net/)
