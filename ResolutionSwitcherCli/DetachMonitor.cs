@@ -1,8 +1,8 @@
 ﻿using ResolutionSwitcher;
-using static ResolutionSwitcher.Models;
+using ResolutionSwitcher.Models;
 using static ResolutionSwitcher.DisplayDeviceSettings;
 using static ResolutionSwitcher.ChangeDisplaySettings;
-using static ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Flags;
 
 namespace ResolutionSwitcherCli;
 class DetachMonitor
@@ -31,16 +31,16 @@ class DetachMonitor
 
         currentDeviceDisplayMode.dmPelsWidth = 0;
         currentDeviceDisplayMode.dmPelsHeight = 0;
-        currentDeviceDisplayMode.dmFields = FieldUseFlags.Position | 
-                                            FieldUseFlags.PelsWidth |
-                                            FieldUseFlags.PelsHeight;
+        currentDeviceDisplayMode.dmFields = DevModeFieldsFlags.Position | 
+                                            DevModeFieldsFlags.PelsWidth |
+                                            DevModeFieldsFlags.PelsHeight;
 
         logger.AddToHistory(currentDeviceDisplayMode);
 
         var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
         logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
-        if (testStatus != DisplayChangeStatus.Successful)
+        if (testStatus != DisplayChangeStatusFlag.Successful)
         {
             throw new Exception("Test failed");
         }

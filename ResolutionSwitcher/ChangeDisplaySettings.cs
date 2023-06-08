@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using static ResolutionSwitcher.Flags;
-using static ResolutionSwitcher.Structs;
+using ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Structs;
 
 namespace ResolutionSwitcher;
 public class ChangeDisplaySettings
@@ -17,7 +17,7 @@ public class ChangeDisplaySettings
     /// <param name="lParam">If dwFlags is CDS_VIDEOPARAMETERS, lParam is a pointer to a VIDEOPARAMETERS structure. Otherwise lParam must be NULL.</param>
     /// <returns></returns>
     [DllImport("user32.dll")]
-    private static extern DisplayChangeStatus ChangeDisplaySettingsEx(string lpszDeviceName,
+    private static extern DisplayChangeStatusFlag ChangeDisplaySettingsEx(string lpszDeviceName,
                                                                       ref DEVMODE lpDevMode,
                                                                       IntPtr hwnd,
                                                                       ChangeDisplaySettingsFlags dwflags,
@@ -27,13 +27,13 @@ public class ChangeDisplaySettings
     /// Overload of ChangeDisplaySettingsEx that accepts nullable parameters.
     /// </summary>
     [DllImport("user32.dll")]
-    private static extern DisplayChangeStatus ChangeDisplaySettingsEx(string? lpszDeviceName,
+    private static extern DisplayChangeStatusFlag ChangeDisplaySettingsEx(string? lpszDeviceName,
                                                                       IntPtr lpDevMode,
                                                                       IntPtr hwnd,
                                                                       ChangeDisplaySettingsFlags dwflags,
                                                                       IntPtr lParam);
 
-    public static DisplayChangeStatus TestDisplayMode(string deviceName, DEVMODE deviceMode)
+    public static DisplayChangeStatusFlag TestDisplayMode(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
@@ -42,7 +42,7 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatus ChangeDisplayMode(string deviceName, DEVMODE deviceMode)
+    public static DisplayChangeStatusFlag ChangeDisplayMode(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
@@ -51,7 +51,7 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatus SetPrimaryDisplay(string deviceName, DEVMODE deviceMode)
+    public static DisplayChangeStatusFlag SetPrimaryDisplay(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
@@ -60,7 +60,7 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatus ApplyChanges()
+    public static DisplayChangeStatusFlag ApplyChanges()
     {
         return ChangeDisplaySettingsEx(null,
                                        IntPtr.Zero,
@@ -69,32 +69,32 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static string LogDisplayChangeStatus(DisplayChangeStatus status)
+    public static string LogDisplayChangeStatus(DisplayChangeStatusFlag status)
     {
         switch (status)
         {
-            case DisplayChangeStatus.Successful:
+            case DisplayChangeStatusFlag.Successful:
                 return "Success";
 
-            case DisplayChangeStatus.Restart:
+            case DisplayChangeStatusFlag.Restart:
                 return "You'll need to reboot for these changes to apply";
 
-            case DisplayChangeStatus.Failed:
+            case DisplayChangeStatusFlag.Failed:
                 return "Failed To Change The Resolution";
 
-            case DisplayChangeStatus.BadMode:
+            case DisplayChangeStatusFlag.BadMode:
                 return "The graphics mode is not supported";
 
-            case DisplayChangeStatus.NotUpdated:
+            case DisplayChangeStatusFlag.NotUpdated:
                 return "Unable to write settings to the registry";
 
-            case DisplayChangeStatus.BadFlags:
+            case DisplayChangeStatusFlag.BadFlags:
                 return "An invalid set of flags was passed in";
 
-            case DisplayChangeStatus.BadParam:
+            case DisplayChangeStatusFlag.BadParam:
                 return "An invalid parameter was passed in. This can include an invalid flag or combination of flags.";
 
-            case DisplayChangeStatus.BadDualView:
+            case DisplayChangeStatusFlag.BadDualView:
                 return "The settings change was unsuccessful because the system is DualView capable.";
 
             default:

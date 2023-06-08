@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using static ResolutionSwitcher.Flags;
-using static ResolutionSwitcher.Models;
-using static ResolutionSwitcher.Structs;
+using ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Models;
+using ResolutionSwitcher.Structs;
 
 namespace ResolutionSwitcher;
 public class DisplayDeviceSettings
@@ -24,7 +24,7 @@ public class DisplayDeviceSettings
 
     [DllImport("user32.dll")]
     private static extern bool EnumDisplaySettings(string lpszDeviceName,
-                                                   EnumDisplayModeFlags iModeNum,
+                                                   DisplayModeFlag iModeNum,
                                                    ref DEVMODE lpDevMode);
 
     public static DeviceModeDetails GetCurrentDisplayMode(string deviceName)
@@ -32,7 +32,7 @@ public class DisplayDeviceSettings
         DEVMODE deviceMode = new();
         try
         {
-            EnumDisplaySettings(deviceName, EnumDisplayModeFlags.CurrentSettings, ref deviceMode);
+            EnumDisplaySettings(deviceName, DisplayModeFlag.CurrentSettings, ref deviceMode);
         }
         catch (Exception ex)
         {

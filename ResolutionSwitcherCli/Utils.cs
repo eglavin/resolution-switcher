@@ -1,5 +1,5 @@
 ﻿using ResolutionSwitcher;
-using static ResolutionSwitcher.Models;
+using ResolutionSwitcher.Models;
 
 namespace ResolutionSwitcherCli;
 static class Utils

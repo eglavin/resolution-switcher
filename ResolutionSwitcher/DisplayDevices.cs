@@ -1,6 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using static ResolutionSwitcher.Models;
-using static ResolutionSwitcher.Structs;
+﻿using ResolutionSwitcher.Models;
+using System.Runtime.InteropServices;
+using ResolutionSwitcher.Structs;
 
 namespace ResolutionSwitcher;
 public class DisplayDevices

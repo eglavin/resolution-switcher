@@ -1,8 +1,8 @@
 ﻿using ResolutionSwitcher;
 using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.DisplayDeviceSettings;
-using static ResolutionSwitcher.Flags;
-using static ResolutionSwitcher.Models;
+using ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Models;
 using static ResolutionSwitcherCli.Utils;
 
 namespace ResolutionSwitcherCli;
@@ -59,7 +59,7 @@ class SelectResolution
         var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, newMode.DeviceMode);
         logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
-        if (testStatus != DisplayChangeStatus.Successful)
+        if (testStatus != DisplayChangeStatusFlag.Successful)
         {
             throw new Exception("Test failed");
         }

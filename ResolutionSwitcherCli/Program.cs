@@ -2,7 +2,7 @@
 using ResolutionSwitcherCli;
 using static ResolutionSwitcher.DisplayDevices;
 using static ResolutionSwitcher.DisplayDeviceSettings;
-using static ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Flags;
 using static ResolutionSwitcherCli.Utils;
 
 

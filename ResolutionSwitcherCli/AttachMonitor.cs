@@ -2,9 +2,9 @@ using ResolutionSwitcher;
 using static ResolutionSwitcher.ChangeDisplaySettings;
 using static ResolutionSwitcher.DeviceCaps;
 using static ResolutionSwitcher.DeviceContext;
-using static ResolutionSwitcher.Models;
+using ResolutionSwitcher.Models;
 using static ResolutionSwitcher.DisplayDeviceSettings;
-using static ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Flags;
 
 namespace ResolutionSwitcherCli;
 class AttachMonitor
@@ -33,7 +33,7 @@ class AttachMonitor
 
         // Modify current device mode
         currentDeviceMode.dmPositionX -= currentDeviceWidth;
-        currentDeviceMode.dmFields = FieldUseFlags.Position;
+        currentDeviceMode.dmFields = DevModeFieldsFlags.Position;
 
         logger.AddToHistory(currentDeviceMode);
 
@@ -41,7 +41,7 @@ class AttachMonitor
         var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentDeviceMode);
         logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
-        if (testStatus != DisplayChangeStatus.Successful)
+        if (testStatus != DisplayChangeStatusFlag.Successful)
         {
             throw new Exception("Test failed");
         }
