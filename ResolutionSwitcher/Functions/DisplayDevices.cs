@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using ResolutionSwitcher.Structs;
 
-namespace ResolutionSwitcher;
+namespace ResolutionSwitcher.Functions;
 public class DisplayDevices
 {
     /// <summary>

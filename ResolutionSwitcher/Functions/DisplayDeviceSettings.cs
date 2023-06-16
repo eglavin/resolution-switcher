@@ -3,7 +3,7 @@ using ResolutionSwitcher.Flags;
 using ResolutionSwitcher.Models;
 using ResolutionSwitcher.Structs;
 
-namespace ResolutionSwitcher;
+namespace ResolutionSwitcher.Functions;
 public class DisplayDeviceSettings
 {
     private static int MIN_WIDTH = 800;
@@ -50,11 +50,11 @@ public class DisplayDeviceSettings
 
             for (int index = 0; EnumDisplaySettings(deviceName, index, ref deviceMode); index++)
             {
-                if ((filtered &&
+                if (filtered &&
                     deviceMode.dmPelsWidth >= MIN_WIDTH &&
                     deviceMode.dmPelsHeight >= MIN_HEIGHT &&
                     displayModeDetails.FindIndex((d) => d.Width == deviceMode.dmPelsWidth &&
-                                                        d.Height == deviceMode.dmPelsHeight) == -1) ||
+                                                        d.Height == deviceMode.dmPelsHeight) == -1 ||
                     !filtered)
                 {
                     displayModeDetails.Add(new DeviceModeDetails(index, deviceMode));

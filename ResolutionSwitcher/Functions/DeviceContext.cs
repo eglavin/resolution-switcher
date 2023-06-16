@@ -1,10 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ResolutionSwitcher;
+namespace ResolutionSwitcher.Functions;
 public class DeviceContext
 {
     /// <summary>
-    /// The GetDC function retrieves a handle to a device context (DC) for the client area of a specified window or for the entire screen. 
+    /// The GetDC function retrieves a handle to a device context (DC) for the client area of a specified window or for the entire screen.
     /// You can use the returned handle in subsequent GDI functions to draw in the DC.
     /// </summary>
     /// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdc
@@ -13,7 +13,7 @@ public class DeviceContext
     public static extern IntPtr GetDC(IntPtr hWnd);
 
     /// <summary>
-    /// The ReleaseDC function releases a device context (DC), freeing it for use by other applications. 
+    /// The ReleaseDC function releases a device context (DC), freeing it for use by other applications.
     /// </summary>
     /// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasedc
     /// <param name="hWnd">A handle to the window whose DC is to be released.</param>
@@ -31,4 +31,3 @@ public class DeviceContext
         return ReleaseDC(IntPtr.Zero, hDC);
     }
 }
-

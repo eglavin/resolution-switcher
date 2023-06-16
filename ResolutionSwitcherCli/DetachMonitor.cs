@@ -1,8 +1,8 @@
 ﻿using ResolutionSwitcher;
-using ResolutionSwitcher.Models;
-using static ResolutionSwitcher.DisplayDeviceSettings;
-using static ResolutionSwitcher.ChangeDisplaySettings;
 using ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Models;
+using static ResolutionSwitcher.Functions.ChangeDisplaySettings;
+using static ResolutionSwitcher.Functions.DisplayDeviceSettings;
 
 namespace ResolutionSwitcherCli;
 class DetachMonitor
@@ -31,7 +31,7 @@ class DetachMonitor
 
         currentDeviceDisplayMode.dmPelsWidth = 0;
         currentDeviceDisplayMode.dmPelsHeight = 0;
-        currentDeviceDisplayMode.dmFields = DevModeFieldsFlags.Position | 
+        currentDeviceDisplayMode.dmFields = DevModeFieldsFlags.Position |
                                             DevModeFieldsFlags.PelsWidth |
                                             DevModeFieldsFlags.PelsHeight;
 

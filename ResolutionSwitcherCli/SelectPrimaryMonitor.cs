@@ -1,8 +1,8 @@
 ﻿using ResolutionSwitcher;
-using static ResolutionSwitcher.ChangeDisplaySettings;
-using ResolutionSwitcher.Models;
-using static ResolutionSwitcher.DisplayDeviceSettings;
 using ResolutionSwitcher.Flags;
+using ResolutionSwitcher.Models;
+using static ResolutionSwitcher.Functions.ChangeDisplaySettings;
+using static ResolutionSwitcher.Functions.DisplayDeviceSettings;
 
 namespace ResolutionSwitcherCli;
 class SelectPrimaryMonitor

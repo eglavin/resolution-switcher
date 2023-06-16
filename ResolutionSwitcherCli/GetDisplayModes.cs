@@ -1,6 +1,6 @@
 ﻿using ResolutionSwitcher;
 using ResolutionSwitcher.Models;
-using static ResolutionSwitcher.DisplayDeviceSettings;
+using static ResolutionSwitcher.Functions.DisplayDeviceSettings;
 using static ResolutionSwitcherCli.Utils;
 
 namespace ResolutionSwitcherCli;

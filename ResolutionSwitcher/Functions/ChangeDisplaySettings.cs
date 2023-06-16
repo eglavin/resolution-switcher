@@ -2,7 +2,7 @@
 using ResolutionSwitcher.Flags;
 using ResolutionSwitcher.Structs;
 
-namespace ResolutionSwitcher;
+namespace ResolutionSwitcher.Functions;
 public class ChangeDisplaySettings
 {
     /// <summary>
@@ -18,20 +18,20 @@ public class ChangeDisplaySettings
     /// <returns></returns>
     [DllImport("user32.dll")]
     private static extern DisplayChangeStatusFlag ChangeDisplaySettingsEx(string lpszDeviceName,
-                                                                      ref DEVMODE lpDevMode,
-                                                                      IntPtr hwnd,
-                                                                      ChangeDisplaySettingsFlags dwflags,
-                                                                      IntPtr lParam);
+                                                                          ref DEVMODE lpDevMode,
+                                                                          IntPtr hwnd,
+                                                                          ChangeDisplaySettingsFlags dwflags,
+                                                                          IntPtr lParam);
 
     /// <summary>
     /// Overload of ChangeDisplaySettingsEx that accepts nullable parameters.
     /// </summary>
     [DllImport("user32.dll")]
     private static extern DisplayChangeStatusFlag ChangeDisplaySettingsEx(string? lpszDeviceName,
-                                                                      IntPtr lpDevMode,
-                                                                      IntPtr hwnd,
-                                                                      ChangeDisplaySettingsFlags dwflags,
-                                                                      IntPtr lParam);
+                                                                          IntPtr lpDevMode,
+                                                                          IntPtr hwnd,
+                                                                          ChangeDisplaySettingsFlags dwflags,
+                                                                          IntPtr lParam);
 
     public static DisplayChangeStatusFlag TestDisplayMode(string deviceName, DEVMODE deviceMode)
     {
@@ -47,7 +47,7 @@ public class ChangeDisplaySettings
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
                                        IntPtr.Zero,
-                                       ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset ,
+                                       ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset,
                                        IntPtr.Zero);
     }
 
@@ -56,7 +56,7 @@ public class ChangeDisplaySettings
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
                                        IntPtr.Zero,
-                                       (ChangeDisplaySettingsFlags.SetPrimary | ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset),
+                                       ChangeDisplaySettingsFlags.SetPrimary | ChangeDisplaySettingsFlags.UpdateRegistry | ChangeDisplaySettingsFlags.NoReset,
                                        IntPtr.Zero);
     }
 

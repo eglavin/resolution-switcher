@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using ResolutionSwitcher.Flags;
 
-namespace ResolutionSwitcher;
+namespace ResolutionSwitcher.Functions;
 public class DeviceCaps
 {
     /// <summary>
