@@ -25,7 +25,7 @@ class SelectPrimaryMonitor
             throw new Exception("Device not connected.");
         }
 
-        var currentDeviceDisplayMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
+        var currentDeviceDisplayMode = GetDeviceDisplaySettings(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
         logger.AddToHistory(currentDeviceDisplayMode);
 
         var offsetX = currentDeviceDisplayMode.dmPositionX;
@@ -41,12 +41,12 @@ class SelectPrimaryMonitor
         {
             if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
             {
-                var deviceDisplayMode = GetCurrentDisplayMode(device.DisplayDevice.DeviceName).DeviceMode;
+                var deviceDisplayMode = GetDeviceDisplaySettings(device.DisplayDevice.DeviceName).DeviceMode;
 
                 deviceDisplayMode.dmPositionX -= offsetX;
                 deviceDisplayMode.dmPositionY -= offsetY;
 
-                var status = ChangeDisplayMode(device.DisplayDevice.DeviceName, deviceDisplayMode);
+                var status = UpdateDisplaySettings(device.DisplayDevice.DeviceName, deviceDisplayMode);
                 logger.LogLine($"ChangeDisplayMode ({device.Name}): {LogDisplayChangeStatus(status)}");
 
                 logger.AddToHistory(deviceDisplayMode);
@@ -54,7 +54,7 @@ class SelectPrimaryMonitor
         }
 
 
-        var applyChangesStatus = ApplyChanges();
+        var applyChangesStatus = ApplyDisplaySettings();
         logger.LogLine($"ApplyChanges: {LogDisplayChangeStatus(applyChangesStatus)}");
     }
 }

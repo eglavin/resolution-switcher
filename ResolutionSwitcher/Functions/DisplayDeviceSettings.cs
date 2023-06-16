@@ -22,17 +22,20 @@ public class DisplayDeviceSettings
                                                    int iModeNum,
                                                    ref DEVMODE lpDevMode);
 
+    /// <summary>
+    /// Overload that takes display mode flag instead of int.
+    /// </summary>
     [DllImport("user32.dll")]
     private static extern bool EnumDisplaySettings(string lpszDeviceName,
                                                    DisplayModeFlag iModeNum,
                                                    ref DEVMODE lpDevMode);
 
-    public static DeviceModeDetails GetCurrentDisplayMode(string deviceName)
+    public static DeviceModeDetails GetDeviceDisplaySettings(string deviceName, DisplayModeFlag mode = DisplayModeFlag.CurrentSettings)
     {
         DEVMODE deviceMode = new();
         try
         {
-            EnumDisplaySettings(deviceName, DisplayModeFlag.CurrentSettings, ref deviceMode);
+            EnumDisplaySettings(deviceName, mode, ref deviceMode);
         }
         catch (Exception ex)
         {
@@ -41,7 +44,7 @@ public class DisplayDeviceSettings
         return new DeviceModeDetails(-1, deviceMode);
     }
 
-    public static List<DeviceModeDetails> GetDisplayModeDetails(string deviceName, bool filtered = true)
+    public static List<DeviceModeDetails> GetAllDisplayDeviceSettings(string deviceName, bool filtered = true)
     {
         List<DeviceModeDetails> displayModeDetails = new();
         try

@@ -45,7 +45,7 @@ class SelectResolution
         }
 
 
-        var newMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName);
+        var newMode = GetDeviceDisplaySettings(selectedDevice.DisplayDevice.DeviceName);
         newMode.DeviceMode.dmPelsWidth = selectedMode.DeviceMode.dmPelsWidth;
         newMode.DeviceMode.dmPelsHeight = selectedMode.DeviceMode.dmPelsHeight;
 
@@ -56,7 +56,7 @@ class SelectResolution
                        GetModeRow(newMode),
                        "\n");
 
-        var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, newMode.DeviceMode);
+        var testStatus = TestDisplaySettings(selectedDevice.DisplayDevice.DeviceName, newMode.DeviceMode);
         logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
         if (testStatus != DisplayChangeStatusFlag.Successful)
@@ -65,10 +65,10 @@ class SelectResolution
         }
 
 
-        var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, newMode.DeviceMode);
+        var changeStatus = UpdateDisplaySettings(selectedDevice.DisplayDevice.DeviceName, newMode.DeviceMode);
         logger.LogLine($"ChangeDisplayMode: {LogDisplayChangeStatus(changeStatus)}");
 
-        var applyStatus = ApplyChanges();
+        var applyStatus = ApplyDisplaySettings();
         logger.LogLine($"ApplyChanges: {LogDisplayChangeStatus(applyStatus)}");
     }
 }

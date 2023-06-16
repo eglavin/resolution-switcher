@@ -22,13 +22,13 @@ class AttachMonitor
             throw new Exception("Device already attached");
         }
 
-        var desktopContext = GetDesktopDC();
+        var desktopContext = GetDeviceContext();
         var currentDeviceWidth = GetDeviceWidth(desktopContext);
-        ReleaseDesktopDC(desktopContext);
+        ReleaseDeviceContext(desktopContext);
 
         logger.LogLine($"Current device context width: {currentDeviceWidth}");
 
-        var currentDeviceMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
+        var currentDeviceMode = GetDeviceDisplaySettings(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
         logger.AddToHistory(currentDeviceMode);
 
         // Modify current device mode
@@ -38,7 +38,7 @@ class AttachMonitor
         logger.AddToHistory(currentDeviceMode);
 
 
-        var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentDeviceMode);
+        var testStatus = TestDisplaySettings(selectedDevice.DisplayDevice.DeviceName, currentDeviceMode);
         logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
         if (testStatus != DisplayChangeStatusFlag.Successful)
@@ -47,10 +47,10 @@ class AttachMonitor
         }
 
 
-        var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentDeviceMode);
+        var changeStatus = UpdateDisplaySettings(selectedDevice.DisplayDevice.DeviceName, currentDeviceMode);
         logger.LogLine($"ChangeDisplayMode: {LogDisplayChangeStatus(changeStatus)}");
 
-        var applyStatus = ApplyChanges();
+        var applyStatus = ApplyDisplaySettings();
         logger.LogLine($"ApplyChanges: {LogDisplayChangeStatus(applyStatus)}");
     }
 }

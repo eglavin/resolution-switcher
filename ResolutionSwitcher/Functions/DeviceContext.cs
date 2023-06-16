@@ -21,12 +21,12 @@ public class DeviceContext
     [DllImport("user32.dll")]
     public static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
-    public static IntPtr GetDesktopDC()
+    public static IntPtr GetDeviceContext()
     {
         return GetDC(IntPtr.Zero);
     }
 
-    public static bool ReleaseDesktopDC(IntPtr hDC)
+    public static bool ReleaseDeviceContext(IntPtr hDC)
     {
         return ReleaseDC(IntPtr.Zero, hDC);
     }

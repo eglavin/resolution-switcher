@@ -26,7 +26,7 @@ class DetachMonitor
             throw new Exception("Device is the primary monitor");
         }
 
-        var currentDeviceDisplayMode = GetCurrentDisplayMode(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
+        var currentDeviceDisplayMode = GetDeviceDisplaySettings(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
         logger.AddToHistory(currentDeviceDisplayMode);
 
         currentDeviceDisplayMode.dmPelsWidth = 0;
@@ -37,7 +37,7 @@ class DetachMonitor
 
         logger.AddToHistory(currentDeviceDisplayMode);
 
-        var testStatus = TestDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
+        var testStatus = TestDisplaySettings(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
         logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
         if (testStatus != DisplayChangeStatusFlag.Successful)
@@ -45,10 +45,10 @@ class DetachMonitor
             throw new Exception("Test failed");
         }
 
-        var changeStatus = ChangeDisplayMode(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
+        var changeStatus = UpdateDisplaySettings(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
         logger.LogLine($"ChangeDisplayMode: {LogDisplayChangeStatus(changeStatus)}");
 
-        var applyStatus = ApplyChanges();
+        var applyStatus = ApplyDisplaySettings();
         logger.LogLine($"ApplyChanges: {LogDisplayChangeStatus(applyStatus)}");
     }
 }

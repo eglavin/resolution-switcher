@@ -24,7 +24,7 @@ public class ChangeDisplaySettings
                                                                           IntPtr lParam);
 
     /// <summary>
-    /// Overload of ChangeDisplaySettingsEx that accepts nullable parameters.
+    /// Overload of ChangeDisplaySettingsEx that accepts nullable parameters, used to apply already saved changes.
     /// </summary>
     [DllImport("user32.dll")]
     private static extern DisplayChangeStatusFlag ChangeDisplaySettingsEx(string? lpszDeviceName,
@@ -33,7 +33,7 @@ public class ChangeDisplaySettings
                                                                           ChangeDisplaySettingsFlags dwflags,
                                                                           IntPtr lParam);
 
-    public static DisplayChangeStatusFlag TestDisplayMode(string deviceName, DEVMODE deviceMode)
+    public static DisplayChangeStatusFlag TestDisplaySettings(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
@@ -42,7 +42,7 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatusFlag ChangeDisplayMode(string deviceName, DEVMODE deviceMode)
+    public static DisplayChangeStatusFlag UpdateDisplaySettings(string deviceName, DEVMODE deviceMode)
     {
         return ChangeDisplaySettingsEx(deviceName,
                                        ref deviceMode,
@@ -60,7 +60,7 @@ public class ChangeDisplaySettings
                                        IntPtr.Zero);
     }
 
-    public static DisplayChangeStatusFlag ApplyChanges()
+    public static DisplayChangeStatusFlag ApplyDisplaySettings()
     {
         return ChangeDisplaySettingsEx(null,
                                        IntPtr.Zero,

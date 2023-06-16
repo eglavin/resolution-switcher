@@ -46,7 +46,7 @@ Enter the function you want to run: ");
     displayDevices.ForEach((device) =>
     {
         // Attach the display mode details to the device
-        device.DisplayModeDetails = GetDisplayModeDetails(device.DisplayDevice.DeviceName, true);
+        device.DisplayModeDetails = GetAllDisplayDeviceSettings(device.DisplayDevice.DeviceName, true);
 
         if (functionInput != "0")
         {

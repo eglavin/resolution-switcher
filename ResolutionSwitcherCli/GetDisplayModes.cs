@@ -17,7 +17,7 @@ class GetDisplayModes
         foreach (var device in displayDevices)
         {
             logger.LogLine(GetDeviceDetails(device, false));
-            var currentMode = GetCurrentDisplayMode(device.DisplayDevice.DeviceName);
+            var currentMode = GetDeviceDisplaySettings(device.DisplayDevice.DeviceName);
             logger.LogLine(GetModeHead(), GetModeRow(currentMode), "\n");
         }
     }
