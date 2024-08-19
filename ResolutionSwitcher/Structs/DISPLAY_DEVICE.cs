@@ -11,39 +11,39 @@ namespace ResolutionSwitcher.Structs;
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 public struct DISPLAY_DEVICE
 {
-    /// <summary>
-    /// Size, in bytes, of the DISPLAY_DEVICE structure. This must be initialized prior to calling EnumDisplayDevices.
-    /// </summary>
-    [MarshalAs(UnmanagedType.U4)]
-    public int cb;
+	/// <summary>
+	/// Size, in bytes, of the DISPLAY_DEVICE structure. This must be initialized prior to calling EnumDisplayDevices.
+	/// </summary>
+	[MarshalAs(UnmanagedType.U4)]
+	public int cb;
 
-    /// <summary>
-    /// An array of characters identifying the device name. This is either the adapter device or the monitor device.
-    /// </summary>
-    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-    public string DeviceName;
+	/// <summary>
+	/// An array of characters identifying the device name. This is either the adapter device or the monitor device.
+	/// </summary>
+	[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+	public string DeviceName;
 
-    /// <summary>
-    /// An array of characters containing the device context string. This is either a description of the display adapter or of the display monitor.
-    /// </summary>
-    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-    public string DeviceString;
+	/// <summary>
+	/// An array of characters containing the device context string. This is either a description of the display adapter or of the display monitor.
+	/// </summary>
+	[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+	public string DeviceString;
 
-    /// <summary>
-    /// Device state flags. It can be any reasonable combination of the following.
-    /// </summary>
-    [MarshalAs(UnmanagedType.U4)]
-    public DisplayDeviceFlags StateFlags;
+	/// <summary>
+	/// Device state flags. It can be any reasonable combination of the following.
+	/// </summary>
+	[MarshalAs(UnmanagedType.U4)]
+	public DisplayDeviceFlags StateFlags;
 
-    /// <summary>
-    /// Not used.
-    /// </summary>
-    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-    public string DeviceID;
+	/// <summary>
+	/// Not used.
+	/// </summary>
+	[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+	public string DeviceID;
 
-    /// <summary>
-    /// Reserved.
-    /// </summary>
-    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-    public string DeviceKey;
+	/// <summary>
+	/// Reserved.
+	/// </summary>
+	[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+	public string DeviceKey;
 }
