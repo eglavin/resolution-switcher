@@ -1,0 +1,8 @@
+ChangeDisplaySettingsEx
+EnumDisplayDevices
+EnumDisplaySettings
+GetDC
+GetDesktopWindow
+GetDeviceCaps
+GetMonitorInfo
+ReleaseDC

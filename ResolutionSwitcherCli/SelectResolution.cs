@@ -1,6 +1,7 @@
 ﻿using ResolutionSwitcher;
 using ResolutionSwitcher.Flags;
 using ResolutionSwitcher.Models;
+using Windows.Win32.Graphics.Gdi;
 using static ResolutionSwitcher.Functions.ChangeDisplaySettings;
 using static ResolutionSwitcher.Functions.DisplayDeviceSettings;
 using static ResolutionSwitcherCli.Utils;
@@ -59,7 +60,7 @@ class SelectResolution
 		var testStatus = TestDisplaySettings(selectedDevice.DisplayDevice.DeviceName, newMode.DeviceMode);
 		logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
-		if (testStatus != DisplayChangeStatusFlag.Successful)
+		if (testStatus != DISP_CHANGE.DISP_CHANGE_SUCCESSFUL)
 		{
 			throw new Exception("Test failed");
 		}

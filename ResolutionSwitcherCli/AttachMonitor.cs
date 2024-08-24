@@ -1,9 +1,9 @@
 using ResolutionSwitcher;
 using ResolutionSwitcher.Flags;
 using ResolutionSwitcher.Models;
+using Windows.Win32.Graphics.Gdi;
+using Windows.Win32;
 using static ResolutionSwitcher.Functions.ChangeDisplaySettings;
-using static ResolutionSwitcher.Functions.DeviceCaps;
-using static ResolutionSwitcher.Functions.DeviceContext;
 using static ResolutionSwitcher.Functions.DisplayDeviceSettings;
 
 namespace ResolutionSwitcherCli;
@@ -17,14 +17,15 @@ class AttachMonitor
 
 	public void Run(DisplayDeviceDetails selectedDevice)
 	{
-		if (selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
+		if (((DisplayDeviceFlags) selectedDevice.DisplayDevice.StateFlags).HasFlag(DisplayDeviceFlags.AttachedToDesktop))
 		{
 			throw new Exception("Device already attached");
 		}
 
-		var desktopContext = GetDeviceContext();
-		var currentDeviceWidth = GetDeviceWidth(desktopContext);
-		ReleaseDeviceContext(desktopContext);
+		var desktopWindow = PInvoke.GetDesktopWindow();
+		var desktopContext = PInvoke.GetDC(desktopWindow);
+		var currentDeviceWidth = PInvoke.GetDeviceCaps(desktopContext, GET_DEVICE_CAPS_INDEX.HORZRES);
+		PInvoke.ReleaseDC(desktopWindow, desktopContext);
 
 		logger.LogLine($"Current device context width: {currentDeviceWidth}");
 
@@ -32,8 +33,8 @@ class AttachMonitor
 		logger.AddToHistory(currentDeviceMode);
 
 		// Modify current device mode
-		currentDeviceMode.dmPositionX -= currentDeviceWidth;
-		currentDeviceMode.dmFields = DevModeFieldsFlags.Position;
+		currentDeviceMode.Anonymous1.Anonymous2.dmPosition.x -= currentDeviceWidth;
+		currentDeviceMode.dmFields = DEVMODE_FIELD_FLAGS.DM_POSITION;
 
 		logger.AddToHistory(currentDeviceMode);
 
@@ -41,7 +42,7 @@ class AttachMonitor
 		var testStatus = TestDisplaySettings(selectedDevice.DisplayDevice.DeviceName, currentDeviceMode);
 		logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
-		if (testStatus != DisplayChangeStatusFlag.Successful)
+		if (testStatus != DISP_CHANGE.DISP_CHANGE_SUCCESSFUL)
 		{
 			throw new Exception("Test failed");
 		}

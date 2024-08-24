@@ -76,9 +76,9 @@ Enter the function you want to run: ");
 				var selectedDevice = AskUserToSelectDevice(displayDevices, logger);
 				var primaryMonitor = new SelectPrimaryMonitor(logger);
 				primaryMonitor.Run(selectedDevice,
-								   displayDevices.Where((device) => device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop) &&
-																	device.Index != selectedDevice.Index)
-												 .ToList());
+													 displayDevices.Where((device) =>
+															((DisplayDeviceFlags)device.DisplayDevice.StateFlags).HasFlag(DisplayDeviceFlags.AttachedToDesktop) && device.Index != selectedDevice.Index
+													 ).ToList());
 				break;
 			}
 		case "3":

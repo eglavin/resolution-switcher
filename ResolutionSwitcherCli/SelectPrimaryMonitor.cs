@@ -20,7 +20,7 @@ class SelectPrimaryMonitor
 			throw new Exception("No other devices found, primary already set");
 		}
 
-		if (!selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
+		if (!((DisplayDeviceFlags) selectedDevice.DisplayDevice.StateFlags).HasFlag(DisplayDeviceFlags.AttachedToDesktop))
 		{
 			throw new Exception("Device not connected.");
 		}
@@ -28,10 +28,10 @@ class SelectPrimaryMonitor
 		var currentDeviceDisplayMode = GetDeviceDisplaySettings(selectedDevice.DisplayDevice.DeviceName).DeviceMode;
 		logger.AddToHistory(currentDeviceDisplayMode);
 
-		var offsetX = currentDeviceDisplayMode.dmPositionX;
-		var offsetY = currentDeviceDisplayMode.dmPositionY;
-		currentDeviceDisplayMode.dmPositionX = 0;
-		currentDeviceDisplayMode.dmPositionY = 0;
+		var offsetX = currentDeviceDisplayMode.Anonymous1.Anonymous2.dmPosition.x;
+		var offsetY = currentDeviceDisplayMode.Anonymous1.Anonymous2.dmPosition.y;
+		currentDeviceDisplayMode.Anonymous1.Anonymous2.dmPosition.x = 0;
+		currentDeviceDisplayMode.Anonymous1.Anonymous2.dmPosition.y = 0;
 
 
 		var newPrimaryMonitorStatus = SetPrimaryDisplay(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
@@ -39,12 +39,12 @@ class SelectPrimaryMonitor
 
 		foreach (var device in otherDevices)
 		{
-			if (device.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
+			if (((DisplayDeviceFlags) device.DisplayDevice.StateFlags).HasFlag(DisplayDeviceFlags.AttachedToDesktop))
 			{
 				var deviceDisplayMode = GetDeviceDisplaySettings(device.DisplayDevice.DeviceName).DeviceMode;
 
-				deviceDisplayMode.dmPositionX -= offsetX;
-				deviceDisplayMode.dmPositionY -= offsetY;
+				deviceDisplayMode.Anonymous1.Anonymous2.dmPosition.x -= offsetX;
+				deviceDisplayMode.Anonymous1.Anonymous2.dmPosition.y -= offsetY;
 
 				var status = UpdateDisplaySettings(device.DisplayDevice.DeviceName, deviceDisplayMode);
 				logger.LogLine($"ChangeDisplayMode ({device.Name}): {LogDisplayChangeStatus(status)}");

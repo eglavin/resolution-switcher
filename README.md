@@ -24,6 +24,7 @@
 - [Github - dotnet / docs (HelloWorldSample)](https://github.com/dotnet/docs/blob/main/samples/snippets/standard/data/sqlite/HelloWorldSample/Program.cs)
 - [Github - dotnet / pinvoke](https://github.com/dotnet/pinvoke)
 - [Github - Grunge / setDisplayRes](https://github.com/Grunge/setDisplayRes)
+- [Github - microsoft / CsWin32](https://github.com/microsoft/CsWin32)
 - [Github - timmui / ScreenResolutionChanger](https://github.com/timmui/ScreenResolutionChanger/tree/master)
 - [Github - VFPX / Win32API](https://github.com/VFPX/Win32API/blob/master/libraries/user32)
 - [Microsoft - ChangeDisplaySettingsExA function (winuser.h)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa)

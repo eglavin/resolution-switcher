@@ -1,18 +1,18 @@
-﻿using ResolutionSwitcher.Structs;
+﻿using Windows.Win32.Graphics.Gdi;
 
 namespace ResolutionSwitcher.Models;
 
 public class DeviceModeDetails
 {
-	public int Index;
-	public int Width { get => DeviceMode.dmPelsWidth; }
-	public int Height { get => DeviceMode.dmPelsHeight; }
-	public int DisplayFrequency { get => DeviceMode.dmDisplayFrequency; }
-	public short BitsPerPixel { get => DeviceMode.dmBitsPerPel; }
+	public uint Index;
+	public uint Width { get => DeviceMode.dmPelsWidth; }
+	public uint Height { get => DeviceMode.dmPelsHeight; }
+	public uint DisplayFrequency { get => DeviceMode.dmDisplayFrequency; }
+	public uint BitsPerPixel { get => DeviceMode.dmBitsPerPel; }
 	public string Fields { get => DeviceMode.dmFields.ToString(); }
-	public DEVMODE DeviceMode;
+	public DEVMODEW DeviceMode;
 
-	public DeviceModeDetails(int index, DEVMODE deviceMode)
+	public DeviceModeDetails(uint index, DEVMODEW deviceMode)
 	{
 		Index = index;
 		DeviceMode = deviceMode;

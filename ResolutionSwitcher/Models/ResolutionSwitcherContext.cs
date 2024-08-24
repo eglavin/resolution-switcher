@@ -15,6 +15,8 @@ public class ResolutionSwitcherContext : DbContext
 		string executionLocation = Assembly.GetExecutingAssembly().Location;
 		string folder = Path.GetDirectoryName(executionLocation) + "";
 		DbPath = Path.Join(folder, "ResolutionSwitcher.db");
+
+		Database.Migrate();
 	}
 
 	protected override void OnConfiguring(DbContextOptionsBuilder options)

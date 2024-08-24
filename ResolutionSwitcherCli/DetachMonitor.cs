@@ -1,6 +1,7 @@
 ﻿using ResolutionSwitcher;
 using ResolutionSwitcher.Flags;
 using ResolutionSwitcher.Models;
+using Windows.Win32.Graphics.Gdi;
 using static ResolutionSwitcher.Functions.ChangeDisplaySettings;
 using static ResolutionSwitcher.Functions.DisplayDeviceSettings;
 
@@ -15,12 +16,12 @@ class DetachMonitor
 
 	public void Run(DisplayDeviceDetails selectedDevice)
 	{
-		if (!selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.AttachedToDesktop))
+		if (!((DisplayDeviceFlags) selectedDevice.DisplayDevice.StateFlags).HasFlag(DisplayDeviceFlags.AttachedToDesktop))
 		{
 			throw new Exception("Device already detached");
 		}
 
-		if (selectedDevice.DisplayDevice.StateFlags.HasFlag(DisplayDeviceFlags.PrimaryDevice))
+		if (((DisplayDeviceFlags) selectedDevice.DisplayDevice.StateFlags).HasFlag(DisplayDeviceFlags.PrimaryDevice))
 		{
 			// TODO: Set primary monitor to the next available monitor
 			throw new Exception("Device is the primary monitor");
@@ -31,16 +32,16 @@ class DetachMonitor
 
 		currentDeviceDisplayMode.dmPelsWidth = 0;
 		currentDeviceDisplayMode.dmPelsHeight = 0;
-		currentDeviceDisplayMode.dmFields = DevModeFieldsFlags.Position |
-											DevModeFieldsFlags.PelsWidth |
-											DevModeFieldsFlags.PelsHeight;
+		currentDeviceDisplayMode.dmFields = DEVMODE_FIELD_FLAGS.DM_POSITION |
+																				DEVMODE_FIELD_FLAGS.DM_PELSWIDTH |
+																				DEVMODE_FIELD_FLAGS.DM_PELSHEIGHT;
 
 		logger.AddToHistory(currentDeviceDisplayMode);
 
 		var testStatus = TestDisplaySettings(selectedDevice.DisplayDevice.DeviceName, currentDeviceDisplayMode);
 		logger.LogLine($"TestDisplayMode: {LogDisplayChangeStatus(testStatus)}");
 
-		if (testStatus != DisplayChangeStatusFlag.Successful)
+		if (testStatus != DISP_CHANGE.DISP_CHANGE_SUCCESSFUL)
 		{
 			throw new Exception("Test failed");
 		}
