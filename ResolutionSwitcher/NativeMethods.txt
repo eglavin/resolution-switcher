@@ -2,6 +2,7 @@ ChangeDisplaySettingsEx
 EnumDisplayDevices
 EnumDisplaySettings
 GetDC
+GetDpiForWindow
 GetDesktopWindow
 GetDeviceCaps
 GetMonitorInfo

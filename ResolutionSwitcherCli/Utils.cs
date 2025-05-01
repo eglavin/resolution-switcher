@@ -27,15 +27,15 @@ Flags: {device.DisplayDevice.StateFlags}";
 
 	public static string GetModeHead()
 	{
-		return @$"{String.Format("|{0,6}|{1,8}|{2,9}|", "Id", "Width", "Height")}
-{String.Format("|{0,6}|{1,8}|{2,9}|", "-----", "-----", "-----")}";
+		return @$"{String.Format("|{0,6}|{1,8}|{2,9}|{3,12}|", "Id", "Width", "Height", "Orientation")}
+{String.Format("|{0,6}|{1,8}|{2,9}|{3,12}|", "------", "--------", "---------", "------------")}";
 	}
 
 	public static string GetModeRow(DeviceModeDetails mode)
 	{
-		return String.Format("|{0,6}|{1,8}|{2,9}|", mode.Index, mode.Width, mode.Height);
+		return String.Format("|{0,6}|{1,8}|{2,9}|{3,12}|{4,12}|", mode.Index, mode.Width, mode.Height, (uint) mode.Orientation, mode.Scale);
 	}
-
+	
 	public static DisplayDeviceDetails AskUserToSelectDevice(List<DisplayDeviceDetails> displayDevices, Logger logger)
 	{
 		logger.Log("Enter the desired device id: ");
