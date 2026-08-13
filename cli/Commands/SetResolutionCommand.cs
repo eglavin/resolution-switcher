@@ -33,6 +33,12 @@ class SetResolutionCommand : DeviceCommand<SetResolutionSettings>
 		}
 
 		var newMode = DisplayDeviceSettings.GetDeviceDisplaySettings(device.DisplayDevice.DeviceName);
+		if (newMode is null)
+		{
+			AnsiConsole.MarkupLine("[red]Unable to read the current display settings for this device.[/]");
+			return 1;
+		}
+
 		newMode.DeviceMode.dmPelsWidth = selectedMode.DeviceMode.dmPelsWidth;
 		newMode.DeviceMode.dmPelsHeight = selectedMode.DeviceMode.dmPelsHeight;
 

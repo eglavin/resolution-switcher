@@ -54,13 +54,9 @@ public class DisplayScaling
 		var paths = new DISPLAYCONFIG_PATH_INFO[pathCount];
 		var modes = new DISPLAYCONFIG_MODE_INFO[modeCount];
 
-		fixed (DISPLAYCONFIG_PATH_INFO* pathsPtr = paths)
-		fixed (DISPLAYCONFIG_MODE_INFO* modesPtr = modes)
+		if (PInvoke.QueryDisplayConfig(QUERY_DISPLAY_CONFIG_FLAGS.QDC_ONLY_ACTIVE_PATHS, ref pathCount, paths, ref modeCount, modes) != WIN32_ERROR.ERROR_SUCCESS)
 		{
-			if (PInvoke.QueryDisplayConfig(QUERY_DISPLAY_CONFIG_FLAGS.QDC_ONLY_ACTIVE_PATHS, ref pathCount, pathsPtr, ref modeCount, modesPtr, null) != WIN32_ERROR.ERROR_SUCCESS)
-			{
-				return null;
-			}
+			return null;
 		}
 
 		foreach (var path in paths)
@@ -89,13 +85,26 @@ public class DisplayScaling
 			return null;
 		}
 
+		return GetDisplayScaleInfo(source.Value);
+	}
+
+	private unsafe static DisplayScaleInfo? GetDisplayScaleInfo((LUID AdapterId, uint SourceId) source)
+	{
 		var request = new DISPLAYCONFIG_SOURCE_DPI_SCALE_GET();
 		request.Header.type = (DISPLAYCONFIG_DEVICE_INFO_TYPE) DISPLAYCONFIG_DEVICE_INFO_GET_DPI_SCALE;
 		request.Header.size = (uint) Marshal.SizeOf<DISPLAYCONFIG_SOURCE_DPI_SCALE_GET>();
-		request.Header.adapterId = source.Value.AdapterId;
-		request.Header.id = source.Value.SourceId;
+		request.Header.adapterId = source.AdapterId;
+		request.Header.id = source.SourceId;
 
 		if (PInvoke.DisplayConfigGetDeviceInfo((DISPLAYCONFIG_DEVICE_INFO_HEADER*) &request) != 0)
+		{
+			return null;
+		}
+
+		// MinScaleRel/MaxScaleRel come from an undocumented, reverse-engineered request type, so
+		// they aren't guaranteed to be well-formed; reject anything that would make the clamp or
+		// the array indexing below misbehave instead of throwing.
+		if (request.MinScaleRel > request.MaxScaleRel)
 		{
 			return null;
 		}
@@ -121,8 +130,13 @@ public class DisplayScaling
 	public unsafe static bool SetDisplayScale(__char_32 deviceName, uint percent)
 	{
 		var source = FindSource(deviceName);
-		var info = GetDisplayScaleInfo(deviceName);
-		if (source is null || info is null)
+		if (source is null)
+		{
+			return false;
+		}
+
+		var info = GetDisplayScaleInfo(source.Value);
+		if (info is null)
 		{
 			return false;
 		}

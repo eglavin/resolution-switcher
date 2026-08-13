@@ -1,4 +1,3 @@
-using ResolutionSwitcherLib.Flags;
 using ResolutionSwitcherLib.Functions;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -17,7 +16,7 @@ class AttachCommand : DeviceCommand<DeviceCommandSettings>
 			return 1;
 		}
 
-		if (((DisplayDeviceFlags)device.DisplayDevice.StateFlags).HasFlag(DisplayDeviceFlags.AttachedToDesktop))
+		if (device.DisplayDevice.StateFlags.HasFlag(DISPLAY_DEVICE_STATE_FLAGS.DISPLAY_DEVICE_ATTACHED_TO_DESKTOP))
 		{
 			AnsiConsole.MarkupLine("[red]Device is already attached.[/]");
 			return 1;
@@ -28,7 +27,14 @@ class AttachCommand : DeviceCommand<DeviceCommandSettings>
 		var currentDeviceWidth = PInvoke.GetDeviceCaps(desktopContext, GET_DEVICE_CAPS_INDEX.HORZRES);
 		PInvoke.ReleaseDC(desktopWindow, desktopContext);
 
-		var mode = DisplayDeviceSettings.GetDeviceDisplaySettings(device.DisplayDevice.DeviceName).DeviceMode;
+		var currentSettings = DisplayDeviceSettings.GetDeviceDisplaySettings(device.DisplayDevice.DeviceName);
+		if (currentSettings is null)
+		{
+			AnsiConsole.MarkupLine("[red]Unable to read the current display settings for this device.[/]");
+			return 1;
+		}
+
+		var mode = currentSettings.DeviceMode;
 		mode.Anonymous1.Anonymous2.dmPosition.x -= currentDeviceWidth;
 		mode.dmFields = DEVMODE_FIELD_FLAGS.DM_POSITION;
 

@@ -1,4 +1,5 @@
 using ResolutionSwitcherLib.Models;
+using ResolutionSwitcherLib.Functions;
 using Spectre.Console;
 using Windows.Win32.Graphics.Gdi;
 
@@ -13,15 +14,15 @@ static class Formatting
 
 		foreach (var device in devices)
 		{
-			var mode = ResolutionSwitcherLib.Functions.DisplayDeviceSettings.GetDeviceDisplaySettings(device.DisplayDevice.DeviceName);
-			var scale = ResolutionSwitcherLib.Functions.DisplayScaling.GetDisplayScaleInfo(device.DisplayDevice.DeviceName);
+			var mode = DisplayDeviceSettings.GetDeviceDisplaySettings(device.DisplayDevice.DeviceName);
+			var scale = DisplayScaling.GetDisplayScaleInfo(device.DisplayDevice.DeviceName);
 
 			table.AddRow(
 				device.Index.ToString(),
 				device.Name,
 				device.State,
-				$"{mode.Width}x{mode.Height}",
-				$"{mode.DisplayFrequency}Hz",
+				mode is null ? "-" : $"{mode.Width}x{mode.Height}",
+				mode is null ? "-" : $"{mode.DisplayFrequency}Hz",
 				scale is null ? "-" : $"{scale.Current}%"
 			);
 		}
@@ -60,7 +61,7 @@ static class Formatting
 
 	public static void WriteStatus(string label, DISP_CHANGE status)
 	{
-		var message = ResolutionSwitcherLib.Functions.ChangeDisplaySettings.LogDisplayChangeStatus(status);
+		var message = ChangeDisplaySettings.LogDisplayChangeStatus(status);
 		var color = status switch
 		{
 			DISP_CHANGE.DISP_CHANGE_SUCCESSFUL => "green",
