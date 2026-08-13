@@ -1,8 +1,13 @@
 ChangeDisplaySettingsEx
+DISPLAYCONFIG_SOURCE_DEVICE_NAME
+DisplayConfigGetDeviceInfo
+DisplayConfigSetDeviceInfo
 EnumDisplayDevices
 EnumDisplaySettings
 GetDC
 GetDesktopWindow
 GetDeviceCaps
+GetDisplayConfigBufferSizes
 GetMonitorInfo
+QueryDisplayConfig
 ReleaseDC
