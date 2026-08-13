@@ -1,6 +1,6 @@
 ﻿using Windows.Win32.Graphics.Gdi;
 
-namespace ResolutionSwitcher.Models;
+namespace ResolutionSwitcherLib.Models;
 
 public class DisplayDeviceDetails
 {

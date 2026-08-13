@@ -1,9 +1,10 @@
-﻿using ResolutionSwitcher.Models;
+﻿using ResolutionSwitcherLib.Models;
 using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
 
-namespace ResolutionSwitcher.Functions;
+namespace ResolutionSwitcherLib.Functions;
+
 public class DisplayDevices
 {
 	public static List<DisplayDeviceDetails> GetDisplayDevices()

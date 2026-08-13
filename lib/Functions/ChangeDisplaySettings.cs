@@ -1,7 +1,8 @@
 ﻿using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
 
-namespace ResolutionSwitcher.Functions;
+namespace ResolutionSwitcherLib.Functions;
+
 public class ChangeDisplaySettings
 {
 	public unsafe static DISP_CHANGE TestDisplaySettings(__char_32 deviceName, DEVMODEW deviceMode)
