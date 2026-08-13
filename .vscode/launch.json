@@ -10,9 +10,9 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/ResolutionSwitcherCli/bin/Debug/net7.0/ResolutionSwitcherCli.dll",
+      "program": "${workspaceFolder}/cli/bin/Debug/net7.0/ResolutionSwitcherCli.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/ResolutionSwitcherCli",
+      "cwd": "${workspaceFolder}/cli",
       // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
       "console": "internalConsole",
       "stopAtEntry": false

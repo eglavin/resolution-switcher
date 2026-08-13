@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/ResolutionSwitcherCli/ResolutionSwitcherCli.csproj",
+        "${workspaceFolder}/cli/ResolutionSwitcherCli.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -19,7 +19,7 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/ResolutionSwitcherCli/ResolutionSwitcherCli.csproj",
+        "${workspaceFolder}/cli/ResolutionSwitcherCli.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -33,7 +33,7 @@
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/ResolutionSwitcherCli/ResolutionSwitcherCli.csproj"
+        "${workspaceFolder}/cli/ResolutionSwitcherCli.csproj"
       ],
       "problemMatcher": "$msCompile"
     }
